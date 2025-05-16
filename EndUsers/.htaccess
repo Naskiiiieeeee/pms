@@ -1,0 +1,8 @@
+RewriteEngine On
+
+# If the request is not a directory or file
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Rewrite /something to /something.php
+RewriteRule ^([a-zA-Z0-9_-]+)$ $1.php [L]

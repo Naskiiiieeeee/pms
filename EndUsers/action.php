@@ -1,0 +1,246 @@
+<?php 
+session_start();
+include_once(__DIR__ . "/../connection/config.php");
+include_once(__DIR__ . "/../Methods/classes.php");
+
+$insertUser = new insertUser();
+$SystemOperators = new SystemOperators();
+
+if (isset($_POST['btnSaveRequest'])) {
+  $transactionCode = $SystemOperators->generateNextTransactionCode($con); 
+  $Reason = $_POST['Reason'];
+  $Description = $_POST['Description'];
+
+  $addSupply = implode(",", $_POST['addSupply']);
+  $productDes = implode(",", $_POST['productDes']);
+  $quantity = implode(",", $_POST['quantity']);
+
+  $dateNeeded = $_POST['dateNeeded'];
+  $dateRequest = $_POST['dateRequest'];
+  $empID = $_POST['empID'];
+
+  $insertRequest = "INSERT INTO `request`(`transactionCode`, `Reason`, `Description`, `addSupply`, `productDes`, `quantity`,  `dateNeeded`, `dateRequest`, `empID`) 
+                    VALUES (?,?,?,?,?,?,?,?,?)";
+  $insertRequestStmt = $con->prepare($insertRequest);
+  $insertRequestStmt->bind_param("sssssssss", $transactionCode, $Reason, $Description, $addSupply, $productDes, $quantity,  $dateNeeded, $dateRequest, $empID);
+
+  if ($insertRequestStmt->execute()) {
+        $response = $SystemOperators->sendRequest($empID, $addSupply, $quantity, $dateNeeded);
+        $_SESSION['notification'] = $response['message'];
+        $_SESSION['notification_type'] = $response['type'];
+        echo "<script>window.location.href = 'requestnow';</script>";
+
+  } else {
+        $_SESSION['notification'] = "Error in executing data!";
+        $_SESSION['notification_type'] = "error";
+        echo "<script>window.location.href = 'requestnow';</script>";
+  }
+}
+
+if(isset($_POST['btnDeclineRequest'])){
+  $transcode = $_POST['transcode'];
+  $statusOne = 2;
+  $notes = $_POST['notes'];
+  $declineRequest = "UPDATE `request` SET `statusOne` = ? , `notes` = ? WHERE `transactionCode` = ?";
+  $declineRequestStmt = $con->prepare($declineRequest);
+
+  $declineRequestStmt->bind_param("iss",$statusOne,$notes,$transcode);
+  if($declineRequestStmt->execute()){
+      $_SESSION['notification'] = "Request Has Been Declined";
+      $_SESSION['notification_type'] = "error";
+      echo "<script>window.location.href = 'adminmonitorrequest';</script>";
+  }else{
+    echo $declineRequestStmt->error;
+  }
+}
+
+if(isset($_POST['btnApprovedRequest'])){
+  $transcode = $_POST['transcode'];
+  $statusOne = 1;
+  $dateApprove = date('Y-m-d');
+  $approvedRequest = "UPDATE `request` SET `statusOne` = ? , `dateApprove` = ? WHERE `transactionCode` = ?";
+  $approvedRequestStmt = $con->prepare($approvedRequest);
+
+  $approvedRequestStmt->bind_param("iss",$statusOne,$dateApprove, $transcode);
+  if($approvedRequestStmt->execute()){
+      $_SESSION['notification'] = "Request Has Been Declined";
+      $_SESSION['notification_type'] = "error";
+      echo "<script>window.location.href = 'adminmonitorrequest';</script>";
+  }else{
+    echo $approvedRequestStmt->error;
+  }
+}
+
+if(isset($_POST['deleteRequestA'])){
+  $id = $_POST['deleteRequestA'];
+  $sql = "DELETE FROM `request` WHERE `transactionCode` = '$id'";
+  $query = $con->query($sql) or die ($con->error);
+
+  if($query){
+      '<script>
+          window.location = "monitorRequest.php"; 
+       </script>';
+  }
+}
+
+
+if(isset($_POST['btnPostOrder'])){
+
+
+$orderID = $SystemOperators->generateNextTransactionCode($con); 
+$status = 1;
+$statusOne = 0;
+ $transcode = $_POST['transcode'];
+ $empID = $_POST['empID'];
+ $Reason = $_POST['Reason'];
+ $addSupply = $_POST['addSupply'];
+ $quantity = $_POST['quantity'];
+ $price = $_POST['price'];
+ $totalAmount = $_POST['totalAmount'];
+ $dateNeeded = $_POST['dateNeeded'];
+ $supplier = $_POST['supplier'];
+ $datePosted = date('Y-m-d');
+
+ $selectRequestCode = "SELECT * FROM `orders` WHERE `requestID` = ?";
+ $selectRequestStmt = $con->prepare($selectRequestCode);
+ $selectRequestStmt->bind_param("s", $transcode);
+
+ if($selectRequestStmt->execute()){
+      $results = $selectRequestStmt->get_result();
+      if($results->num_rows > 0){
+        echo '<script> alert("Duplicate Purchased Order!"); window.location = "adminmonitororder.php"; </script>';
+      }else{
+          $checkIfStatusOneis = "SELECT * FROM `request` WHERE `transactionCode` = ? AND `statusOne` = ?";
+          $checkstatusOne = $con->prepare($checkIfStatusOneis);
+          $checkstatusOne->bind_param("si",$transcode,$statusOne);
+          if($checkstatusOne->execute()){
+            $resultsOne =  $checkstatusOne->get_result();
+            if($resultsOne->num_rows > 0){
+                echo 
+                '
+                  <script> alert("Transaction to be confirm first in Request Panel! Please try again!"); window.location="adminmonitororder.php";</script>
+                ';
+            }else{
+              $insertOrder = "INSERT INTO `orders`(`orderID`, `requestID`, `empID`, `Reason`, `addSupply`, `quantity`, `price`, `totalAmount`, `dateNeeded`, `supplierID`,`status`,`datePosted`) VALUES
+              (?,?,?,?,?,?,?,?,?,?,?,?)
+              ";
+              $inserOrderStmt = $con->prepare($insertOrder);
+              $inserOrderStmt->bind_param("ssssssssssss",$orderID,$transcode,$empID,$Reason,$addSupply,$quantity,$price,$totalAmount,$dateNeeded,$supplier,$status,$datePosted );
+    
+              if($inserOrderStmt->execute()){
+                  $updateRequestStatusTwo = mysqli_query($con,"UPDATE `request` SET `statusTwo` = '$status' WHERE `transactionCode` = '$transcode' ");
+                  $response = $SystemOperators->sendOrder($empID,$orderID);
+                  $_SESSION['notification'] = $response['message'];
+                  $_SESSION['notification_type'] = $response['type'];
+                  echo "<script>window.location.href = 'adminmonitororder';</script>";
+              }else{
+                echo $inserOrderStmt->error;
+              }
+            }
+          }else{
+            echo "Error in binding parameters".$checkstatusOne->errno;
+          }
+
+      }
+ }else{
+  echo $selectRequestStmt->error;
+ }
+}
+
+if(isset($_POST['btnUnpostOrder'])){
+
+  $code = "0123456789";
+  $limit = 15;
+  $status = 2;
+  $statusTwo = 2;
+
+  $datePosted = date('Y-m-d');
+  
+  $orderID = $SystemOperators-> randomStringGenerator($limit,$code);
+  
+   $transcode = $_POST['transcode'];
+   $empID = $_POST['empID'];
+   $Reason = $_POST['Reason'];
+   $addSupply = $_POST['addSupply'];
+   $quantity = $_POST['quantity'];
+   $price = $_POST['price'];
+   $totalAmount = $_POST['totalAmount'];
+   $dateNeeded = $_POST['dateNeeded'];
+   $supplier = $_POST['supplier'];
+  
+   $selectRequestCode = "SELECT * FROM `orders` WHERE `requestID` = ?";
+   $selectRequestStmt = $con->prepare($selectRequestCode);
+   $selectRequestStmt->bind_param("s", $transcode);
+  
+   if($selectRequestStmt->execute()){
+        $results = $selectRequestStmt->get_result();
+        if($results->num_rows > 0){
+          echo '<script> alert("Duplicate Purchased Order!"); window.location = "monitorOrders.php"; </>';
+        }else{
+            $insertOrder = "INSERT INTO `orders`(`orderID`, `requestID`, `empID`, `Reason`, `addSupply`, `quantity`, `price`, `totalAmount`, `dateNeeded`, `supplierID`,`status`,`datePosted`) VALUES
+            (?,?,?,?,?,?,?,?,?,?,?,?)
+            ";
+            $inserOrderStmt = $con->prepare($insertOrder);
+            $inserOrderStmt->bind_param("ssssssssssss",$orderID,$transcode,$empID,$Reason,$addSupply,$quantity,$price,$totalAmount,$dateNeeded,$supplier,$status,$datePosted );
+  
+            if($inserOrderStmt->execute()){
+              $updateRequestStatusTwo = mysqli_query($con,"UPDATE `request` SET `statusTwo` = '$statusTwo' WHERE `transactionCode` = '$transcode' ");
+              $response = $SystemOperators-> sendDeclineOrder($empID, $transcode);
+                  $_SESSION['notification'] = $response['message'];
+                  $_SESSION['notification_type'] = $response['type'];
+                  echo "<script>window.location.href = 'adminmonitororder';</script>";
+            }else{
+              echo $inserOrderStmt->error;
+            }
+        }
+   }else{
+    echo $selectRequestStmt->error;
+   }
+}
+
+if(isset($_POST['btnSendConfirmation'])){
+  $empID = $_POST['empID'];
+  $products = $_POST['products'];
+  $quantities = $_POST['quantities'];
+  $orderID = $_POST['orderID'];
+  $date = date("Y-m-d");
+
+  $selectSentOrder = "SELECT * FROM `orderconfirmation` WHERE `orderID` = ?";
+  $selectsentStmt = $con->prepare($selectSentOrder);
+  $selectsentStmt->bind_param("s",$orderID);
+  if($selectsentStmt->execute()){
+      $results = $selectsentStmt->get_result();
+      if($results->num_rows > 0){
+        echo '<script> alert("Message confirmation has been sent already!"); window.location= "ordersHistory.php"; </script>';
+      }else{
+        $insertMessage = "INSERT INTO `orderconfirmation`(`orderID`, `products`, `quantities`, `empID`, `datePosted`) VALUES (?,?,?,?,?)";
+        $insertMessageStmt = $con->prepare($insertMessage);
+        $insertMessageStmt->bind_param("sssss",$orderID,$products,$quantities,$empID,$date);
+        if($insertMessageStmt->execute()){
+          $SystemOperators->sendConfirmationOrder($empID, $orderID);
+        }else{
+          echo $insertMessageStmt->error;
+        }
+      }
+  }else{
+    echo $selectsentStmt->error;
+  }
+
+}
+
+if(isset($_POST['btnPickup'])){
+
+  $orderID = $_POST['orderID'];
+  $remarks = $_POST['remarks'];
+
+  $updateArrivalConfirmation = "UPDATE `orderconfirmation` SET `status` = ? WHERE `orderID` = ? ";
+  $arrivalStmt  = $con->prepare($updateArrivalConfirmation);
+  $arrivalStmt->bind_param("is",$remarks,$orderID);
+  if($arrivalStmt->execute()){
+    echo"
+    <script>alert('Order Confirmation Remarks has been updated!'); window.location='adminpickupOrders.php';</script>
+    ";
+  }else{
+    echo $arrivalStmt->error;
+  }
+}
