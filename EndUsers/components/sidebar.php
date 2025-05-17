@@ -54,19 +54,19 @@
 	          </li>
               
               <li>
-                <a href="#userSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-users"></i> Manage System Users</a>
-                <ul class="collapse list-unstyled" id="userSubmenu">
-                    <li>
-                        <a href="adminunverifiedstaff.php">Unverified Staff</a>
+                <a href="#userSubmenu" data-toggle="collapse" aria-expanded="<?= $isTemplateActive ? 'true' : 'false' ?>" class="dropdown-toggle <?= $isTemplateActive ? '' : '' ?>" class="dropdown-toggle"><i class="fas fa-users"></i> Manage System Users</a>
+                <ul class="collapse list-unstyled <?= $isTemplateActive ? 'show' : '' ?>" id="userSubmenu" id="userSubmenu">
+                    <li class="<?= $currentPage == 'adminunverifiedstaff' ? 'active' : '' ?>">
+                        <a href="adminunverifiedstaff">Unverified Staff</a>
                     </li>
-                    <li>
-                        <a href="adminunverifiedadmins.php">Unverified Admin</a>
+                    <li class="<?= $currentPage == 'adminunverifiedadmins' ? 'active' : '' ?>">
+                        <a href="adminunverifiedadmins">Unverified Admin</a>
                     </li>
-                    <li>
-                        <a href="adminverifieduser.php">Verified Users List</a>
+                    <li class="<?= $currentPage == 'adminverifieduser' ? 'active' : '' ?>">
+                        <a href="adminverifieduser">Verified Users List</a>
                     </li>
-                    <li>
-                        <a href="#">Add New User</a>
+                    <li class="<?= $currentPage == 'adminaddusers' ? 'active' : '' ?>">
+                        <a href="adminaddusers">Add New User</a>
                     </li>
                 </ul>
 	          </li>
