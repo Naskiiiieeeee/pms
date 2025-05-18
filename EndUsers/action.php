@@ -8,16 +8,16 @@ $SystemOperators = new SystemOperators();
 
 if (isset($_POST['btnSaveRequest'])) {
   $transactionCode = $SystemOperators->generateNextTransactionCode($con); 
-  $Reason = $_POST['Reason'];
-  $Description = $_POST['Description'];
+  $Reason = filter_input(INPUT_POST, 'Reason', FILTER_SANITIZE_SPECIAL_CHARS);
+  $Description = filter_input(INPUT_POST, 'Description', FILTER_SANITIZE_SPECIAL_CHARS);
 
   $addSupply = implode(",", $_POST['addSupply']);
   $productDes = implode(",", $_POST['productDes']);
   $quantity = implode(",", $_POST['quantity']);
 
-  $dateNeeded = $_POST['dateNeeded'];
-  $dateRequest = $_POST['dateRequest'];
-  $empID = $_POST['empID'];
+  $dateNeeded = filter_input(INPUT_POST, 'dateNeeded', FILTER_SANITIZE_SPECIAL_CHARS);
+  $dateRequest = filter_input(INPUT_POST, 'dateRequest', FILTER_SANITIZE_SPECIAL_CHARS);
+  $Description = filter_input(INPUT_POST, 'empID', FILTER_SANITIZE_SPECIAL_CHARS);
 
   $insertRequest = "INSERT INTO `request`(`transactionCode`, `Reason`, `Description`, `addSupply`, `productDes`, `quantity`,  `dateNeeded`, `dateRequest`, `empID`) 
                     VALUES (?,?,?,?,?,?,?,?,?)";
@@ -38,9 +38,9 @@ if (isset($_POST['btnSaveRequest'])) {
 }
 
 if(isset($_POST['btnDeclineRequest'])){
-  $transcode = $_POST['transcode'];
+  $transcode = filter_input(INPUT_POST, 'transcode', FILTER_SANITIZE_SPECIAL_CHARS);
+  $notes = filter_input(INPUT_POST, 'notes', FILTER_SANITIZE_SPECIAL_CHARS);
   $statusOne = 2;
-  $notes = $_POST['notes'];
   $declineRequest = "UPDATE `request` SET `statusOne` = ? , `notes` = ? WHERE `transactionCode` = ?";
   $declineRequestStmt = $con->prepare($declineRequest);
 
@@ -55,7 +55,7 @@ if(isset($_POST['btnDeclineRequest'])){
 }
 
 if(isset($_POST['btnApprovedRequest'])){
-  $transcode = $_POST['transcode'];
+  $transcode = filter_input(INPUT_POST, 'transcode', FILTER_SANITIZE_SPECIAL_CHARS);
   $statusOne = 1;
   $dateApprove = date('Y-m-d');
   $approvedRequest = "UPDATE `request` SET `statusOne` = ? , `dateApprove` = ? WHERE `transactionCode` = ?";
@@ -72,7 +72,7 @@ if(isset($_POST['btnApprovedRequest'])){
 }
 
 if(isset($_POST['deleteRequestA'])){
-  $id = $_POST['deleteRequestA'];
+  $id = filter_input(INPUT_POST, 'deleteRequestA', FILTER_SANITIZE_SPECIAL_CHARS);
   $sql = "DELETE FROM `request` WHERE `transactionCode` = '$id'";
   $query = $con->query($sql) or die ($con->error);
 
@@ -87,18 +87,20 @@ if(isset($_POST['deleteRequestA'])){
 if(isset($_POST['btnPostOrder'])){
 
 
-$orderID = $SystemOperators->generateNextTransactionCode($con); 
-$status = 1;
-$statusOne = 0;
- $transcode = $_POST['transcode'];
- $empID = $_POST['empID'];
- $Reason = $_POST['Reason'];
- $addSupply = $_POST['addSupply'];
- $quantity = $_POST['quantity'];
- $price = $_POST['price'];
- $totalAmount = $_POST['totalAmount'];
- $dateNeeded = $_POST['dateNeeded'];
- $supplier = $_POST['supplier'];
+  $orderID = $SystemOperators->generateNextTransactionCode($con); 
+  $status = 1;
+  $statusOne = 0;
+  $transcode = filter_input(INPUT_POST, 'transcode', FILTER_SANITIZE_SPECIAL_CHARS);
+  $empID = filter_input(INPUT_POST, 'empID', FILTER_SANITIZE_SPECIAL_CHARS);
+  $Reason = filter_input(INPUT_POST, 'Reason', FILTER_SANITIZE_SPECIAL_CHARS);
+  $addSupply = filter_input(INPUT_POST, 'addSupply', FILTER_SANITIZE_SPECIAL_CHARS);
+  $quantity = filter_input(INPUT_POST, 'quantity', FILTER_SANITIZE_SPECIAL_CHARS);
+  $price = filter_input(INPUT_POST, 'price', FILTER_SANITIZE_SPECIAL_CHARS);
+  $totalAmount = filter_input(INPUT_POST, 'totalAmount', FILTER_SANITIZE_SPECIAL_CHARS);
+  $dateNeeded = filter_input(INPUT_POST, 'dateNeeded', FILTER_SANITIZE_SPECIAL_CHARS);
+  $supplier = filter_input(INPUT_POST, 'supplier', FILTER_SANITIZE_SPECIAL_CHARS);
+
+
  $datePosted = date('Y-m-d');
 
  $selectRequestCode = "SELECT * FROM `orders` WHERE `requestID` = ?";
@@ -157,16 +159,15 @@ if(isset($_POST['btnUnpostOrder'])){
   $datePosted = date('Y-m-d');
   
   $orderID = $SystemOperators-> randomStringGenerator($limit,$code);
-  
-   $transcode = $_POST['transcode'];
-   $empID = $_POST['empID'];
-   $Reason = $_POST['Reason'];
-   $addSupply = $_POST['addSupply'];
-   $quantity = $_POST['quantity'];
-   $price = $_POST['price'];
-   $totalAmount = $_POST['totalAmount'];
-   $dateNeeded = $_POST['dateNeeded'];
-   $supplier = $_POST['supplier'];
+  $transcode = filter_input(INPUT_POST, 'transcode', FILTER_SANITIZE_SPECIAL_CHARS);
+  $empID = filter_input(INPUT_POST, 'empID', FILTER_SANITIZE_SPECIAL_CHARS);
+  $Reason = filter_input(INPUT_POST, 'Reason', FILTER_SANITIZE_SPECIAL_CHARS);
+  $addSupply = filter_input(INPUT_POST, 'addSupply', FILTER_SANITIZE_SPECIAL_CHARS);
+  $quantity = filter_input(INPUT_POST, 'quantity', FILTER_SANITIZE_SPECIAL_CHARS);
+  $price = filter_input(INPUT_POST, 'price', FILTER_SANITIZE_SPECIAL_CHARS);
+  $totalAmount = filter_input(INPUT_POST, 'totalAmount', FILTER_SANITIZE_SPECIAL_CHARS);
+  $dateNeeded = filter_input(INPUT_POST, 'dateNeeded', FILTER_SANITIZE_SPECIAL_CHARS);
+  $supplier = filter_input(INPUT_POST, 'supplier', FILTER_SANITIZE_SPECIAL_CHARS);
   
    $selectRequestCode = "SELECT * FROM `orders` WHERE `requestID` = ?";
    $selectRequestStmt = $con->prepare($selectRequestCode);
@@ -199,10 +200,10 @@ if(isset($_POST['btnUnpostOrder'])){
 }
 
 if(isset($_POST['btnSendConfirmation'])){
-  $empID = $_POST['empID'];
-  $products = $_POST['products'];
-  $quantities = $_POST['quantities'];
-  $orderID = $_POST['orderID'];
+  $empID = filter_input(INPUT_POST, 'empID', FILTER_SANITIZE_SPECIAL_CHARS);
+  $products = filter_input(INPUT_POST, 'products', FILTER_SANITIZE_SPECIAL_CHARS);
+  $quantities = filter_input(INPUT_POST, 'quantities', FILTER_SANITIZE_SPECIAL_CHARS);
+  $orderID = filter_input(INPUT_POST, 'orderID', FILTER_SANITIZE_SPECIAL_CHARS);
   $date = date("Y-m-d");
 
   $selectSentOrder = "SELECT * FROM `orderconfirmation` WHERE `orderID` = ?";
@@ -229,9 +230,8 @@ if(isset($_POST['btnSendConfirmation'])){
 }
 
 if(isset($_POST['btnPickup'])){
-
-  $orderID = $_POST['orderID'];
-  $remarks = $_POST['remarks'];
+  $orderID = filter_input(INPUT_POST, 'orderID', FILTER_SANITIZE_SPECIAL_CHARS);
+  $remarks = filter_input(INPUT_POST, 'remarks', FILTER_SANITIZE_SPECIAL_CHARS);
 
   $updateArrivalConfirmation = "UPDATE `orderconfirmation` SET `status` = ? WHERE `orderID` = ? ";
   $arrivalStmt  = $con->prepare($updateArrivalConfirmation);
@@ -249,25 +249,80 @@ if(isset($_POST['btnPickup'])){
 if(isset($_POST['btnSaveUser']))
 {
   $fullname = filter_input(INPUT_POST, 'fullname', FILTER_SANITIZE_SPECIAL_CHARS);
-  $email = filter_input(INPUT_POST, 'empID', FILTER_SANITIZE_SPECIAL_CHARS);
-  $password = filter_input(INPUT_POST, 'pw', FILTER_SANITIZE_SPECIAL_CHARS);
-  $role = filter_input(INPUT_POST, 'job', FILTER_SANITIZE_SPECIAL_CHARS);
+  $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_SPECIAL_CHARS);
+  $pass = filter_input(INPUT_POST, 'pw', FILTER_SANITIZE_SPECIAL_CHARS);
+  $role = filter_input(INPUT_POST, 'role', FILTER_SANITIZE_SPECIAL_CHARS);
 
   $dep = htmlspecialchars($_POST['dep'] ?? "");
   $department = htmlspecialchars($_POST['department'] ?? "");
 
-  $password = password_hash($pw, PASSWORD_BCRYPT);
+  $password = password_hash($pass, PASSWORD_BCRYPT);
 
   if($role == "Admin"){
-    $response = $insertUser->adminUser($con, $fullname,$email,$pass,$role);
-    $_SESSION['notification'] = $response['message'];
-    $_SESSION['notification_type'] = $response['type'];
-    echo "<script>window.location.href = 'adminaddusers';</script>";
-
+      $response = $insertUser->adminUser($con, $fullname,$email,$password,$role);
+      $_SESSION['notification'] = $response['message'];
+      $_SESSION['notification_type'] = $response['type'];
+      echo "<script>window.location.href = 'adminaddusers';</script>";
   }else{
-    $response = $insertUser->depheadUser($con, $fullname,$email,$pass,$dep,$department, $role);
-    $_SESSION['notification'] = $response['message'];
-    $_SESSION['notification_type'] = $response['type'];
-    echo "<script>window.location.href = 'adminaddusers';</script>";
+      $response = $insertUser->depheadUser($con, $fullname,$email,$password,$dep,$department, $role);
+      $_SESSION['notification'] = $response['message'];
+      $_SESSION['notification_type'] = $response['type'];
+      echo "<script>window.location.href = 'adminaddusers';</script>";
   }
+}
+
+if(isset($_POST['btnUpdateUsers'])){
+  $id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_SPECIAL_CHARS);
+
+  $status = 1;
+  $updateUser = "UPDATE `users` SET `status` = ? WHERE `username` = ?";
+  $updateUserSTMT = $con->prepare($updateUser);
+  $updateUserSTMT->bind_param("ss",$status,$id);
+  if($updateUserSTMT->execute()){
+      $_SESSION['notification'] = "User Access Updated Successfully!";
+      $_SESSION['notification_type'] = "success";
+
+      echo "<script>window.location.href = 'adminverifieduser';</script>";
+  }else{
+      $_SESSION['notification'] = "Error in Executing Data!";
+      $_SESSION['notification_type'] = "error";
+      echo "<script>window.location.href = 'adminverifieduser';</script>";
+  }
+}
+
+if(isset($_POST['btnUpdateUsersAccess'])){
+  $id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_SPECIAL_CHARS);
+  $access = filter_input(INPUT_POST, 'access', FILTER_SANITIZE_SPECIAL_CHARS);
+
+  $updateUser = "UPDATE `users` SET `status` = ? WHERE `username` = ?";
+  $updateUserSTMT = $con->prepare($updateUser);
+  $updateUserSTMT->bind_param("ss",$access,$id);
+  if($updateUserSTMT->execute()){
+      $_SESSION['notification'] = "User Access Updated Successfully!";
+      $_SESSION['notification_type'] = "success";
+
+      echo "<script>window.location.href = 'adminverifieduser';</script>";
+  }else{
+      $_SESSION['notification'] = "Error in Executing Data!";
+      $_SESSION['notification_type'] = "error";
+      echo "<script>window.location.href = 'adminverifieduser';</script>";
+  }
+}
+
+
+
+if(isset($_POST['deleteUsers'])){
+  $id = filter_input(INPUT_POST, 'deleteUsers', FILTER_SANITIZE_SPECIAL_CHARS);
+  $sql = "DELETE FROM `users` WHERE `user_id` = ?";
+  $deleteUser = $con->prepare($sql);
+  $deleteUser->bind_param("s", $id );
+  if($deleteUser->execute()){
+      '<script>
+          window.location = "adminverifieduser"; 
+       </script>';
+  }else{
+    echo "Error in executing Data".$deleteUser->errno;
+  }
+  $deleteUser->close();
+  $con->close();
 }

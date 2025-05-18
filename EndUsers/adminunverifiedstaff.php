@@ -1,17 +1,4 @@
 <?php 
-session_start();
-if (!isset($_SESSION['username']) || !isset($_SESSION['fullname']) || !isset($_SESSION['role'])) {
-    '<script>alert("Unauthorized access!"); window.location = "index.php";</script>';
-    exit;
-}
-$notification = $_SESSION['notification'] ?? '';
-$notificationType = $_SESSION['notification_type'] ?? 'success'; 
-unset($_SESSION['notification'], $_SESSION['notification_type']);
-
-$username = $_SESSION['username'];
-$fullname = $_SESSION['fullname'];
-$role = $_SESSION['role'];
-
 include_once("./components/header.php");
 include_once("./components/sidebar.php");
 include_once("./components/innernavbar.php");
@@ -40,6 +27,7 @@ $con = connection();
                     <th scope="col">#</th>
                     <th scope="col">Access ID</th>
                     <th scope="col">Full Name</th>
+                    <th scope="col">Campus</th>
                     <th scope="col">Department</th>
                     <th scope="col">Access</th>
                     <th scope="col">Status</th>
@@ -57,6 +45,7 @@ $con = connection();
                     <td><?php echo $count++;?></td>
                     <td class="id"><?= $row['username']; ?></td>
                     <td class="fname"><?=  $row['fullname'];?></td>
+                    <td><?=  $row['campus'];?></td>
                     <td><?=  $row['department'];?></td>
                     <td class="job"><?=  $row['access'];?></td>
                     <td>
@@ -90,26 +79,25 @@ $con = connection();
             <form action="action.php" method="post">
                 <div class="modal-content">
                     <div class="modal-header bg-info text-white">
-                        <h1 class="modal-title fs-5 fw-bold" id="exampleModalLabel"><i class="fa fa-user-plus" aria-hidden="true"></i> Verify Users Account</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h4 class="modal-title fs-5 fw-bold" id="exampleModalLabel"><i class="fa fa-user-plus" aria-hidden="true"></i> Verify Users Account</h4>
                     </div>
                     <div class="modal-body">
                             <div class="mb-3">
                                 <label for="exampleInputPassword1" class="form-label">Access ID</label>
-                                <input type="text" name="id" class="form-control" id="id">
+                                <input type="text" name="id" class="form-control" id="id" readonly>
                             </div>
                             <div class="mb-3">
                                 <label for="exampleInputEmail1" class="form-label">User Full Name</label>
-                                <input type="text" name="fname" class="form-control" id="fname">
+                                <input type="text" name="fname" class="form-control" id="fname" readonly>
                             </div>
                             <div class="mb-3">
                                 <label for="exampleInputEmail1" class="form-label">Access Description</label>
-                                <input type="text" name="job" class="form-control" id="job">
+                                <input type="text" name="job" class="form-control" id="job" readonly>
                             </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa fa-times-circle-o" aria-hidden="true"></i>  Close</button>
-                        <button type="submit" name="btnUpdateUsers" class="btn btn-success"><i class="fa fa-check-square-o" aria-hidden="true"></i>Verify Account</button>
+                        <button type="submit" name="btnUpdateUsers" class="btn btn-success"><i class="fa fa-check-square-o" aria-hidden="true"></i> Verify Account</button>
                     </div>
                 </div>
             </form>

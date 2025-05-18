@@ -1,17 +1,4 @@
 <?php 
-session_start();
-if (!isset($_SESSION['username']) || !isset($_SESSION['fullname']) || !isset($_SESSION['role'])) {
-    '<script>alert("Unauthorized access!"); window.location = "index.php";</script>';
-    exit;
-}
-$notification = $_SESSION['notification'] ?? '';
-$notificationType = $_SESSION['notification_type'] ?? 'success'; 
-unset($_SESSION['notification'], $_SESSION['notification_type']);
-
-$username = $_SESSION['username'];
-$fullname = $_SESSION['fullname'];
-$role = $_SESSION['role'];
-
 include_once("./components/header.php");
 include_once("./components/sidebar.php");
 include_once("./components/innernavbar.php");
@@ -39,12 +26,11 @@ $con = connection();
                     <input name="fullname" type="text" class="form-control" required>
                     </div>
                 </div>
-
                 
                 <div class="row mb-3">
                     <label class="col-md-4 col-lg-3 col-form-label">Access Description</label>
                     <div class="col-md-8 col-lg-9">
-                        <select name="job" class="col-md-8 col-lg-9 form-control" required>
+                        <select name="role" class="col-md-8 col-lg-9 form-control" required>
                             <option selected disabled  class="fw-bold">SELECT</option>
                             <option value="Admin">Administrator</option>
                             <option value="DepHead">Department Head</option>
@@ -77,7 +63,7 @@ $con = connection();
                 <div class="row mb-3">
                     <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Username:</label>
                     <div class="col-md-8 col-lg-9">
-                    <input name="empID" type="text" class="form-control" required>
+                    <input name="email" type="email" class="form-control" required>
                     </div>
                 </div>
 

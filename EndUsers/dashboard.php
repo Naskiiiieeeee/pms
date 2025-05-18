@@ -1,14 +1,4 @@
 <?php 
-session_start();
-if (!isset($_SESSION['username']) || !isset($_SESSION['fullname']) || !isset($_SESSION['role'])) {
-    '<script>alert("Unauthorized access!"); window.location = "index.php";</script>';
-    exit;
-}
-
-$username = $_SESSION['username'];
-$fullname = $_SESSION['fullname'];
-$role = $_SESSION['role'];
-
 include_once("./components/header.php");
 include_once("./components/sidebar.php");
 include_once("./components/innernavbar.php");

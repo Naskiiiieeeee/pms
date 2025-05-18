@@ -1,3 +1,18 @@
+<?php 
+session_start();
+if (!isset($_SESSION['username']) || !isset($_SESSION['fullname']) || !isset($_SESSION['role'])) {
+    '<script>alert("Unauthorized access!"); window.location = "index.php";</script>';
+    exit;
+}
+$notification = $_SESSION['notification'] ?? '';
+$notificationType = $_SESSION['notification_type'] ?? 'success'; 
+unset($_SESSION['notification'], $_SESSION['notification_type']);
+
+$username = $_SESSION['username'];
+$fullname = $_SESSION['fullname'];
+$role = $_SESSION['role'];
+?>
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -13,8 +28,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <link rel="shortcut icon" href="./images/bsu.jpg" type="image/x-icon">
     <script type="text/javascript">
       window.history.forward();

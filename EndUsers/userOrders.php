@@ -1,17 +1,4 @@
 <?php 
-session_start();
-if (!isset($_SESSION['username']) || !isset($_SESSION['fullname']) || !isset($_SESSION['role'])) {
-    '<script>alert("Unauthorized access!"); window.location = "index.php";</script>';
-    exit;
-}
-$notification = $_SESSION['notification'] ?? '';
-$notificationType = $_SESSION['notification_type'] ?? 'success'; 
-unset($_SESSION['notification'], $_SESSION['notification_type']);
-
-$username = $_SESSION['username'];
-$fullname = $_SESSION['fullname'];
-$role = $_SESSION['role'];
-
 include_once("./components/header.php");
 include_once("./components/sidebar.php");
 include_once("./components/innernavbar.php");

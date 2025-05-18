@@ -1,17 +1,4 @@
 <?php 
-session_start();
-if (!isset($_SESSION['username']) || !isset($_SESSION['fullname']) || !isset($_SESSION['role'])) {
-    '<script>alert("Unauthorized access!"); window.location = "index.php";</script>';
-    exit;
-}
-$notification = $_SESSION['notification'] ?? '';
-$notificationType = $_SESSION['notification_type'] ?? 'success'; 
-unset($_SESSION['notification'], $_SESSION['notification_type']);
-
-$username = $_SESSION['username'];
-$fullname = $_SESSION['fullname'];
-$role = $_SESSION['role'];
-
 include_once("./components/header.php");
 include_once("./components/sidebar.php");
 include_once("./components/innernavbar.php");
@@ -49,7 +36,7 @@ $con = connection();
             <tbody>
             <?php 
                     $count = 1;
-                    $getUsersInfo = mysqli_query($con,"SELECT * FROM `users` WHERE `status` = 1 ");
+                    $getUsersInfo = mysqli_query($con,"SELECT * FROM `users` WHERE `status` = 1 OR `status` = 2  ORDER BY `user_id` DESC");
                     while($row = mysqli_fetch_assoc($getUsersInfo)){
                     ?>
                   <tr>
@@ -60,10 +47,12 @@ $con = connection();
                     <td class="job"><?=  $row['access'];?></td>
                     <td>
                       <?php
-                        if ($row['status'] == 0 ) {
-                          echo '<span class="badge bg-secondary text-white p-2"><i class="fa fa-exclamation-triangle"></i> NOT APPROVED </span>';
-                        } else {
+                        if ($row['status'] == 1 ) {
                           echo '<span class="badge bg-success p-2 text-white"><i class="fa fa-check-circle"></i> VERIFIED </span>';
+                        }else if ($row['status'] == 2 ) {
+                          echo '<span class="badge bg-danger text-white p-2"><i class="fa fa-exclamation-triangle"></i> RESTRICTED </span>';
+                        } else {
+                          echo '<span class="badge bg-secondary text-white p-2"><i class="fa fa-exclamation-triangle"></i> NOT APPROVED </span>';
                         }
                       ?>
                     </td>
@@ -89,50 +78,37 @@ $con = connection();
             <form action="action.php" method="post">
                 <div class="modal-content">
                     <div class="modal-header bg-info text-white">
-                        <h1 class="modal-title fs-5 fw-bold" id="exampleModalLabel"><i class="fa fa-user-plus" aria-hidden="true"></i> Verify Users Account</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h4 class="modal-title fs-5 fw-bold" id="exampleModalLabel"><i class="fa fa-user-plus" aria-hidden="true"></i> Manage Users Access</h4>
                     </div>
                     <div class="modal-body">
                             <div class="mb-3">
                                 <label for="exampleInputPassword1" class="form-label">Access ID</label>
-                                <input type="text" name="id" class="form-control" id="id">
+                                <input type="text" name="id" class="form-control" id="id" readonly>
                             </div>
                             <div class="mb-3">
                                 <label for="exampleInputEmail1" class="form-label">User Full Name</label>
-                                <input type="text" name="fname" class="form-control" id="fname">
+                                <input type="text" name="fname" class="form-control" id="fname" readonly>
                             </div>
                             <div class="mb-3">
                                 <label for="exampleInputEmail1" class="form-label">Access Description</label>
-                                <input type="text" name="job" class="form-control" id="job">
+                                <select name="access" id="" class="form-control">
+                                  <option selected disabled>Please Select</option>
+                                  <option value="1">Verified</option>
+                                  <option value="2">Restricted</option>
+                                </select>
                             </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa fa-times-circle-o" aria-hidden="true"></i>  Close</button>
-                        <button type="submit" name="btnUpdateUsers" class="btn btn-success"><i class="fa fa-check-square-o" aria-hidden="true"></i>Verify Account</button>
+                        <button type="submit" name="btnUpdateUsersAccess" class="btn btn-success"><i class="fa fa-check-square-o" aria-hidden="true"></i> Save</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $('.editbutton').click(function() {
-                var $row = $(this).closest('tr');
-                var id = $row.find('.id').text();
-                var fname = $row.find('.fname').text();
-                var job = $row.find('.job').text();
-
-                $('#id').val(id);
-                $('#fname').val(fname);
-                $('#job').val(job);
-
-                $('#verifyModal').modal('show');
-            });
-        });
-    </script>
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
 
     <script>
         $(document).ready(function(){
@@ -170,6 +146,25 @@ $con = connection();
         })
         })
     </script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.editbutton').click(function() {
+                var $row = $(this).closest('tr');
+                var id = $row.find('.id').text();
+                var fname = $row.find('.fname').text();
+                var job = $row.find('.job').text();
+
+                $('#id').val(id);
+                $('#fname').val(fname);
+                $('#job').val(job);
+
+                $('#verifyModal').modal('show');
+            });
+        });
+    </script>
+
+
 
 
 <?php include_once("./components/footscript.php"); ?>
