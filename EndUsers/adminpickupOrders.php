@@ -7,7 +7,7 @@ $con = connection();
 
 ?>
 <!-- Page Content  -->
-<h2 class="mb-4">Pick Up Package</h2>
+<h2 class="mb-4">Recieved Package</h2>
 
 <div class="row">
   

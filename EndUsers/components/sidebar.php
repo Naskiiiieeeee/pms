@@ -48,14 +48,21 @@
                 </ul>
 	          </li>
 
-
-	          <li class="<?= $currentPage == 'adminpickupOrders' ? 'active' : '' ?>">
-                <a href="adminpickupOrders"><i class="fas fa-box"></i>  Pick-up Package</a>
+              <li>
+                <a href="#package" data-toggle="collapse" aria-expanded="<?= $isTemplateActive ? 'true' : 'false' ?>" class="dropdown-toggle <?= $isTemplateActive ? '' : '' ?>" class="dropdown-toggle"><i class="fas fa-box"></i>  Package Status</a>
+                <ul class="collapse list-unstyled <?= $isTemplateActive ? 'show' : '' ?>" id="package" >
+                    <li class="<?= $currentPage == 'adminpickupOrders' ? 'active' : '' ?>">
+                        <a href="adminpickupOrders">Pick-up Package</a>
+                    </li>
+                    <li class="<?= $currentPage == 'adminpickupPackage' ? 'active' : '' ?>">
+                        <a href="adminpickupPackage">Recieved Package</a>
+                    </li>
+                </ul>
 	          </li>
-              
+
               <li>
                 <a href="#userSubmenu" data-toggle="collapse" aria-expanded="<?= $isTemplateActive ? 'true' : 'false' ?>" class="dropdown-toggle <?= $isTemplateActive ? '' : '' ?>" class="dropdown-toggle"><i class="fas fa-users"></i> Manage System Users</a>
-                <ul class="collapse list-unstyled <?= $isTemplateActive ? 'show' : '' ?>" id="userSubmenu" id="userSubmenu">
+                <ul class="collapse list-unstyled <?= $isTemplateActive ? 'show' : '' ?>" id="userSubmenu">
                     <li class="<?= $currentPage == 'adminunverifiedstaff' ? 'active' : '' ?>">
                         <a href="adminunverifiedstaff">Unverified Staff</a>
                     </li>
@@ -80,9 +87,6 @@
                     </li>
                     <li>
                         <a href="table.php">PMS Order Reports</a>
-                    </li>
-                    <li>
-                        <a href="adminpickupPackage.php">Recieved Packages</a>
                     </li>
                 </ul>
 	          </li>
@@ -140,8 +144,8 @@
               <li class="<?= ($currentPage == 'requestnow') ? 'active' : '' ?>">
                 <a href="requestnow"><i class="fas fa-pencil"></i> Request Now</a>
 	          </li>
-              <li>
-                <a href="#"><i class="fas fa-box"></i>  Pick-up Package</a>
+              <li class="<?= ($currentPage == 'userpickupPackage') ? 'active' : '' ?>">
+                <a href="userpickupPackage"><i class="fas fa-box"></i>  Pick-up Package</a>
 	          </li>
 
               <li>

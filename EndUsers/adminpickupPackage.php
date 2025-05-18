@@ -43,7 +43,7 @@ $con = connection();
                     }else{
                         $page_no = 1; 
                     }
-                    $total_records_per_page = 3; // Change this to the number of records per page you want
+                    $total_records_per_page = 3; 
                     $offset = ($page_no - 1) * $total_records_per_page;
                     $count = $offset + 1;
                     $previous_page = $page_no - 1;
@@ -98,7 +98,7 @@ $con = connection();
                         if ($row['status'] == 0 ) {
                           echo '<span class="badge bg-secondary text-white p-2"><i class="fa fa-exclamation-triangle"></i> Ready to Pick-Up </span>';
                         } else {
-                          echo '<span class="badge bg-success p-2 mt-1"><i class="fa fa-check-circle"></i> Recieved </span>';
+                          echo '<span class="badge bg-success text-white p-2 mt-1"><i class="fa fa-check-circle"></i> Recieved </span>';
                         }
                       ?>
                     </td>
@@ -187,40 +187,40 @@ $con = connection();
     </script>
 
     <script>
-    $(document).ready(function(){
-    $(document).on('click','.deleteUsers',function(){
-        var id = $(this).attr('id');
+      $(document).ready(function(){
+      $(document).on('click','.deleteUsers',function(){
+          var id = $(this).attr('id');
 
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-            $.ajax({
-                url: 'action.php',
-                type: 'POST',
-                data: {deleteUsers:id},
-                success: function(data){
-                Swal.fire({
-                    title: 'Success',
-                    icon: 'success',
-                    text: ' Users Information Deleted Succesfully',
-                    showConfirmButton: false,
-                    timer: 2000,
-                }).then(()=>{
-                    window.location.reload();
-                })
-                }
-            })
-            }
-        })
-    })
-    })
+          Swal.fire({
+              title: 'Are you sure?',
+              text: "You won't be able to revert this!",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Yes, delete it!'
+          }).then((result) => {
+              if (result.isConfirmed) {
+              $.ajax({
+                  url: 'action.php',
+                  type: 'POST',
+                  data: {deleteUsers:id},
+                  success: function(data){
+                  Swal.fire({
+                      title: 'Success',
+                      icon: 'success',
+                      text: ' Users Information Deleted Succesfully',
+                      showConfirmButton: false,
+                      timer: 2000,
+                  }).then(()=>{
+                      window.location.reload();
+                  })
+                  }
+              })
+              }
+          })
+      })
+      })
     </script>
 
 

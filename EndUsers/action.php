@@ -239,9 +239,9 @@ if(isset($_POST['btnPickup'])){
   $arrivalStmt  = $con->prepare($updateArrivalConfirmation);
   $arrivalStmt->bind_param("is",$remarks,$orderID);
   if($arrivalStmt->execute()){
-    echo"
-    <script>alert('Order Confirmation Remarks has been updated!'); window.location='adminpickupOrders.php';</script>
-    ";
+    $_SESSION['notification'] = "Order Confirmation Remarks has been updated!";
+    $_SESSION['notification_type'] = "success";
+    echo "<script>window.location.href = 'adminpickupOrders';</script>";
   }else{
     echo $arrivalStmt->error;
   }
