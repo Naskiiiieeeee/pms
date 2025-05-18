@@ -49,7 +49,8 @@ $con = connection();
             <tbody>
             <?php 
                     $count = 1;
-                    $getUsersInfo = mysqli_query($con,"SELECT * FROM `users` WHERE `status` = 0 ");
+                    $access = "Dephead";
+                    $getUsersInfo = mysqli_query($con,"SELECT * FROM `users` WHERE `status` = 0  AND `access` = '$access'");
                     while($row = mysqli_fetch_assoc($getUsersInfo)){
                     ?>
                   <tr>

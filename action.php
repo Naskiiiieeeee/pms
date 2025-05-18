@@ -7,12 +7,15 @@ $insertUser = new insertUser();
 $con = connection();
 
 if(isset($_POST['btnRegister'])){
-    $fullname = htmlspecialchars($_POST['fullname']);
-    $email = htmlspecialchars($_POST['email']);
-    $password = htmlspecialchars($_POST['password']);
-    $role = htmlspecialchars($_POST['role']);
+    
+    $fullname = filter_input(INPUT_POST, 'fullname', FILTER_SANITIZE_SPECIAL_CHARS);
+    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_SPECIAL_CHARS);
+    $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_SPECIAL_CHARS);
+    $role = filter_input(INPUT_POST, 'role', FILTER_SANITIZE_SPECIAL_CHARS);
+
     $dep = htmlspecialchars($_POST['dep'] ?? "");
     $department = htmlspecialchars($_POST['department'] ?? "");
+
 
     $pass = password_hash($password, PASSWORD_BCRYPT);
 

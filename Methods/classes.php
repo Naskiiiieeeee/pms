@@ -84,6 +84,42 @@ class insertUser {
             }
         }
     }
+
+    public function newUserInfo($con, $fullname, $email, $password, $campus, $department, $role) {
+        $selectUserifExist = "SELECT * FROM `users` WHERE `username` = ? ";
+        $selectUserSTMT = $con->prepare($selectUserifExist);
+        $selectUserSTMT->bind_param("s",$email);
+        $selectUserSTMT->execute();
+        $result = $selectUserSTMT->get_result();
+
+        if($result->num_rows > 0){
+            return [
+                'message' => "Duplicate User Information!",
+                'type' => 'error'
+            ];
+        }else{
+            $stmt = $con->prepare("INSERT INTO `users` (`fullname`, `username`, `password`, `campus`, `department`, `access`) VALUES (?, ?, ?, ?, ?, ?)");
+            if ($stmt) {
+                $stmt->bind_param("ssssss", $fullname, $email, $password, $campus, $department, $role);
+                if ($stmt->execute()) {
+                    return [
+                        'message' => "New user successfully added.",
+                        'type' => 'success'
+                    ];
+                } else {
+                    return [
+                        'message' => "Error executing statement: " . $stmt->error,
+                        'type' => 'error'
+                    ];
+                }
+            } else {
+                return [
+                    'message' => "Error preparing statement: " . $con->error,
+                    'type' => 'error'
+                ];
+            }
+        }
+    }
 }
 
 class SystemOperators{

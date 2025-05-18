@@ -20,7 +20,7 @@ $con = connection();
 
 ?>
 <!-- Page Content  -->
-<h2 class="mb-4">Manage Users</h2>
+<h2 class="mb-4">Manage Admin Users</h2>
 
 <div class="row">
   
@@ -40,7 +40,6 @@ $con = connection();
                     <th scope="col">#</th>
                     <th scope="col">Access ID</th>
                     <th scope="col">Full Name</th>
-                    <th scope="col">Department</th>
                     <th scope="col">Access</th>
                     <th scope="col">Status</th>
                     <th scope="col">Action</th>
@@ -49,14 +48,14 @@ $con = connection();
             <tbody>
             <?php 
                     $count = 1;
-                    $getUsersInfo = mysqli_query($con,"SELECT * FROM `users` WHERE `status` = 0 ");
+                    $access = "Admin";
+                    $getUsersInfo = mysqli_query($con,"SELECT * FROM `users` WHERE `status` = 0 AND `access` = '$access'");
                     while($row = mysqli_fetch_assoc($getUsersInfo)){
                     ?>
                   <tr>
                     <td><?php echo $count++;?></td>
                     <td class="id"><?= $row['username']; ?></td>
                     <td class="fname"><?=  $row['fullname'];?></td>
-                    <td><?=  $row['department'];?></td>
                     <td class="job"><?=  $row['access'];?></td>
                     <td>
                       <?php

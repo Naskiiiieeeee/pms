@@ -244,3 +244,30 @@ if(isset($_POST['btnPickup'])){
     echo $arrivalStmt->error;
   }
 }
+
+
+if(isset($_POST['btnSaveUser']))
+{
+  $fullname = filter_input(INPUT_POST, 'fullname', FILTER_SANITIZE_SPECIAL_CHARS);
+  $email = filter_input(INPUT_POST, 'empID', FILTER_SANITIZE_SPECIAL_CHARS);
+  $password = filter_input(INPUT_POST, 'pw', FILTER_SANITIZE_SPECIAL_CHARS);
+  $role = filter_input(INPUT_POST, 'job', FILTER_SANITIZE_SPECIAL_CHARS);
+
+  $dep = htmlspecialchars($_POST['dep'] ?? "");
+  $department = htmlspecialchars($_POST['department'] ?? "");
+
+  $password = password_hash($pw, PASSWORD_BCRYPT);
+
+  if($role == "Admin"){
+    $response = $insertUser->adminUser($con, $fullname,$email,$pass,$role);
+    $_SESSION['notification'] = $response['message'];
+    $_SESSION['notification_type'] = $response['type'];
+    echo "<script>window.location.href = 'adminaddusers';</script>";
+
+  }else{
+    $response = $insertUser->depheadUser($con, $fullname,$email,$pass,$dep,$department, $role);
+    $_SESSION['notification'] = $response['message'];
+    $_SESSION['notification_type'] = $response['type'];
+    echo "<script>window.location.href = 'adminaddusers';</script>";
+  }
+}

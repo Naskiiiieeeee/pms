@@ -19,7 +19,7 @@ include_once(__DIR__ . "/../connection/config.php");
 $con = connection();
 ?>
 <!-- Page Content  -->
-<h2 class="mb-4">Request Form</h2>
+<h2 class="mb-4">Add New Users</h2>
 
 <div class="row">
   
@@ -31,7 +31,7 @@ $con = connection();
                 <?php echo htmlspecialchars($notification); ?>
             </div>
         <?php endif; ?>
-        <h5 class="card-title"><i class="fas fa-plus"></i> Add New</h5>
+        <h5 class="card-title"><i class="fas fa-plus"></i></h5>
             <form action="action.php" method="post" enctype="multipart/form-data">
                 <div class="row mb-3">
                     <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Fullname</label>
@@ -40,41 +40,37 @@ $con = connection();
                     </div>
                 </div>
 
-                <div class="row mb-3">
-                    <label for="about" class="col-md-4 col-lg-3 col-form-label">Address</label>
-                    <div class="col-md-8 col-lg-9">
-                    <textarea name="address" class="form-control" id="about" style="height: 100px" required></textarea>
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <label for="Address" class="col-md-4 col-lg-3 col-form-label">Phone Number</label>
-                    <div class="col-md-8 col-lg-9">
-                    <input name="pnumber" type="number" class="form-control" required>
-                    </div>
-                </div>
                 
                 <div class="row mb-3">
                     <label class="col-md-4 col-lg-3 col-form-label">Access Description</label>
                     <div class="col-md-8 col-lg-9">
-                    <select name="job" class="col-md-8 col-lg-9 form-control" required>
-                    <option value="" class="fw-bold">SELECT</option>
-                    <option value="Admin">Administrator</option>
-                    <option value="DepHead">Department Head</option>
-                    </select>
+                        <select name="job" class="col-md-8 col-lg-9 form-control" required>
+                            <option selected disabled  class="fw-bold">SELECT</option>
+                            <option value="Admin">Administrator</option>
+                            <option value="DepHead">Department Head</option>
+                        </select>
                     </div>
                 </div>
 
                 <div class="row mb-3">
-                    <label class="col-md-4 col-lg-3 col-form-label">* if you choosen Department Head *</label>
+                    <label for="dep"  class="col-md-4 col-lg-3 col-form-label">Campus</label>
                     <div class="col-md-8 col-lg-9">
-                    <select name="dep" class="col-md-8 col-lg-9 form-control ">
-                    <option value="" class="fw-bold">SELECT</option>
-                    <option value="ICS">Institute of Computer Studies</option>
-                    <option value="IOB">Institute of Business Adminstration</option>
-                    <option value="IOE">Institute of Education</option>
-                    <option value="Others">Others</option>
-                    </select>
+                        <select name="dep" id="dep" class="form-control">
+                            <option selected disabled>SELECT CAMPUS</option>
+                            <option value="BSU ALANGILAN">BSU ALANGILAN</option>
+                            <option value="BSU NASUGBO">BSU NASUGBO</option>
+                            <option value="BSU MALVAR">BSU MALVAR</option>
+                            <option value="BSU LOBO">BSU LOBO</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="department"  class="col-md-4 col-lg-3 col-form-label">Department</label>
+                    <div class="col-md-8 col-lg-9">
+                        <select name="department" id="department" class="form-control">
+                            <option selected disabled>SELECT DEPARTMENT</option>
+                        </select>
                     </div>
                 </div>
 
@@ -100,39 +96,58 @@ $con = connection();
     </div>
   </div>
 </div>
-
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 <script>
-    $(document).ready(function () {
-        $(".add_item_btn").click(function (e) {
-            e.preventDefault();
-            $(".add_supply_wrapper").append(`
-                <div class="row">
-                    <div class="col-md-3 mb-3">
-                        <input type="text" name="addSupply[]" class="form-control" placeholder="Product name" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <input type="text" name="productDes[]" class="form-control" placeholder="Description" required>
-                    </div>
-                    <div class="col-md-2 mb-3">
-                        <input type="number" name="quantity[]" class="form-control" placeholder="Qty" required>
-                    </div>
-                    <div class="col-md-1 mb-3 d-grid">
-                        <button class="btn btn-danger remove_item_btn" type="button">
-                            <span class="icon"><i class="fas fa-minus"></i></span>
-                        </button>
-                    </div>
-                </div>
-            `);
-        });
+  function toggleForm(form) {
+    document.getElementById('login-form').style.display = form === 'login' ? 'block' : 'none';
+    document.getElementById('register-form').style.display = form === 'register' ? 'block' : 'none';
+  }
+          document.addEventListener("DOMContentLoaded", function() {
+            const departments = {
+                "BSU ALANGILAN": [
+                    "COLLEGE OF ENGINEERING, ARCHITECTURE AND FINE ARTS",
+                    "COLLEGE OF INDUSTRIAL TECHNOLOGY",
+                    "COLLEGE OF INFORMATICS AND COMPUTING SCIENCES/ INFORMATION TECHNOLOGY & COMPUTER SCIENCES"
+                ],
+                "BSU NASUGBO": [
+                    "COLLEGE OF TEACHER EDUCATION",
+                    "COLLEGE OF ACCOUNTANCY, BUSINESS, ECONOMICS AND INTERNATIONAL HOSPITALITY MANAGEMENT",
+                    "COLLEGE OF INFORMATICS AND COMPUTING SCIENCES",
+                    "COLLEGE OF ARTS AND SCIENCES",
+                    "COLLEGE OF HEALTH SCIENCES",
+                    "COLLEGE OF CRIMINAL JUSTICE EDUCATION",
+                    "LABORATORY SCHOOL"
+                ],
+                "BSU MALVAR": [
+                    "COLLEGE OF ENGINEERING TECHNOLOGY / COLLEGE OF INDUSTRIAL TECHNOLOGY",
+                    "COLLEGE OF TEACHER EDUCATION",
+                    "COLLEGE OF ENGINEERING",
+                    "COLLEGE OF INFORMATICS AND COMPUTING SCIENCES",
+                    "COLLEGE OF ARTS AND SCIENCES",
+                    "COLLEGE OF ACCOUNTANCY, BUSINESS, ECONOMICS AND INTERNATIONAL HOSPITALITY MANAGEMENT"
+                ],
+                "BSU LOBO": [
+                    "COLLEGE OF AGRICULTURE AND FORESTRY"
+                ]
+            };
 
-        $(document).on('click', '.remove_item_btn', function (e) {
-            e.preventDefault();
-            $(this).closest('.row').remove();
+            const campusDropdown = document.getElementById("dep");
+            const departmentDropdown = document.getElementById("department");
+
+            campusDropdown.addEventListener("change", function() {
+                const selectedCampus = this.value;
+                departmentDropdown.innerHTML = '<option selected disabled>SELECT DEPARTMENT</option>'; 
+
+                if (departments[selectedCampus]) {
+                    departments[selectedCampus].forEach(department => {
+                        let option = document.createElement("option");
+                        option.value = department;
+                        option.textContent = department;
+                        departmentDropdown.appendChild(option);
+                    });
+                }
+            });
         });
-    });
 </script>
 
 
