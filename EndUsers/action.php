@@ -17,7 +17,7 @@ if (isset($_POST['btnSaveRequest'])) {
 
   $dateNeeded = filter_input(INPUT_POST, 'dateNeeded', FILTER_SANITIZE_SPECIAL_CHARS);
   $dateRequest = filter_input(INPUT_POST, 'dateRequest', FILTER_SANITIZE_SPECIAL_CHARS);
-  $Description = filter_input(INPUT_POST, 'empID', FILTER_SANITIZE_SPECIAL_CHARS);
+  $empID = filter_input(INPUT_POST, 'empID', FILTER_SANITIZE_SPECIAL_CHARS);
 
   $insertRequest = "INSERT INTO `request`(`transactionCode`, `Reason`, `Description`, `addSupply`, `productDes`, `quantity`,  `dateNeeded`, `dateRequest`, `empID`) 
                     VALUES (?,?,?,?,?,?,?,?,?)";
@@ -63,8 +63,8 @@ if(isset($_POST['btnApprovedRequest'])){
 
   $approvedRequestStmt->bind_param("iss",$statusOne,$dateApprove, $transcode);
   if($approvedRequestStmt->execute()){
-      $_SESSION['notification'] = "Request Has Been Declined";
-      $_SESSION['notification_type'] = "error";
+      $_SESSION['notification'] = "Request Has Been Approved";
+      $_SESSION['notification_type'] = "success";
       echo "<script>window.location.href = 'adminmonitorrequest';</script>";
   }else{
     echo $approvedRequestStmt->error;
@@ -95,8 +95,6 @@ if(isset($_POST['btnPostOrder'])){
   $Reason = filter_input(INPUT_POST, 'Reason', FILTER_SANITIZE_SPECIAL_CHARS);
   $addSupply = filter_input(INPUT_POST, 'addSupply', FILTER_SANITIZE_SPECIAL_CHARS);
   $quantity = filter_input(INPUT_POST, 'quantity', FILTER_SANITIZE_SPECIAL_CHARS);
-  $price = filter_input(INPUT_POST, 'price', FILTER_SANITIZE_SPECIAL_CHARS);
-  $totalAmount = filter_input(INPUT_POST, 'totalAmount', FILTER_SANITIZE_SPECIAL_CHARS);
   $dateNeeded = filter_input(INPUT_POST, 'dateNeeded', FILTER_SANITIZE_SPECIAL_CHARS);
   $supplier = filter_input(INPUT_POST, 'supplier', FILTER_SANITIZE_SPECIAL_CHARS);
 
@@ -123,11 +121,11 @@ if(isset($_POST['btnPostOrder'])){
                   <script> alert("Transaction to be confirm first in Request Panel! Please try again!"); window.location="adminmonitororder.php";</script>
                 ';
             }else{
-              $insertOrder = "INSERT INTO `orders`(`orderID`, `requestID`, `empID`, `Reason`, `addSupply`, `quantity`, `price`, `totalAmount`, `dateNeeded`, `supplierID`,`status`,`datePosted`) VALUES
-              (?,?,?,?,?,?,?,?,?,?,?,?)
+              $insertOrder = "INSERT INTO `orders`(`orderID`, `requestID`, `empID`, `Reason`, `addSupply`, `quantity`, `dateNeeded`, `supplierID`,`status`,`datePosted`) VALUES
+              (?,?,?,?,?,?,?,?,?,?)
               ";
               $inserOrderStmt = $con->prepare($insertOrder);
-              $inserOrderStmt->bind_param("ssssssssssss",$orderID,$transcode,$empID,$Reason,$addSupply,$quantity,$price,$totalAmount,$dateNeeded,$supplier,$status,$datePosted );
+              $inserOrderStmt->bind_param("ssssssssss",$orderID,$transcode,$empID,$Reason,$addSupply,$quantity,$dateNeeded,$supplier,$status,$datePosted );
     
               if($inserOrderStmt->execute()){
                   $updateRequestStatusTwo = mysqli_query($con,"UPDATE `request` SET `statusTwo` = '$status' WHERE `transactionCode` = '$transcode' ");
@@ -212,13 +210,18 @@ if(isset($_POST['btnSendConfirmation'])){
   if($selectsentStmt->execute()){
       $results = $selectsentStmt->get_result();
       if($results->num_rows > 0){
-        echo '<script> alert("Message confirmation has been sent already!"); window.location= "ordersHistory.php"; </script>';
+        $_SESSION['notification'] = "Message Already Sent to Users Email Account";
+        $_SESSION['notification_type'] = "error";
+        echo "<script>window.location.href = 'adminordersHistory';</script>";
       }else{
         $insertMessage = "INSERT INTO `orderconfirmation`(`orderID`, `products`, `quantities`, `empID`, `datePosted`) VALUES (?,?,?,?,?)";
         $insertMessageStmt = $con->prepare($insertMessage);
         $insertMessageStmt->bind_param("sssss",$orderID,$products,$quantities,$empID,$date);
         if($insertMessageStmt->execute()){
-          $SystemOperators->sendConfirmationOrder($empID, $orderID);
+          $response = $SystemOperators->sendConfirmationOrder($empID, $orderID);
+          $_SESSION['notification'] = $response['message'];
+          $_SESSION['notification_type'] = $response['type'];
+          echo "<script>window.location.href = 'adminordersHistory';</script>";
         }else{
           echo $insertMessageStmt->error;
         }
@@ -226,7 +229,6 @@ if(isset($_POST['btnSendConfirmation'])){
   }else{
     echo $selectsentStmt->error;
   }
-
 }
 
 if(isset($_POST['btnPickup'])){

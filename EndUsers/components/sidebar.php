@@ -146,7 +146,7 @@
 
               <li>
                 <a href="#tempSubmenu" data-toggle="collapse" aria-expanded="<?= $isTemplateActive ? 'true' : 'false' ?>" class="dropdown-toggle <?= $isTemplateActive ? '' : '' ?>">
-                   <i class="fas fa-file"></i> Request History
+                   <i class="fas fa-clock"></i> Order and Request History
                 </a>
                 
                 <ul class="collapse list-unstyled <?= $isTemplateActive ? 'show' : '' ?>" id="tempSubmenu">
@@ -159,14 +159,14 @@
                 </ul>
               </li>
                             
-              <li>
+              <!-- <li>
                 <a href="#reportSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-print"></i> System Reports</a>
                 <ul class="collapse list-unstyled" id="reportSubmenu">
                     <li>
                         <a href="#">PMS Request Reports</a>
                     </li>
                 </ul>
-	          </li>
+	          </li> -->
 
               <li>
                 <a href="#profileSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-user"></i>  Profile</a>

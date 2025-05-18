@@ -89,7 +89,7 @@ $con = connection();
                       ?>
                     </td>
                     <td>
-                      <a href="viewunitRequestHistory.php?ID=<?php echo $row['transactionCode']?>" class="btn btn-sm btn-secondary mt-1 p-1"><i class="fa fa-eye mx-2" data-toggle="tooltip" title="Request"></i> </a>
+                      <a href="adminviewunitRequestHistory?ID=<?php echo $row['transactionCode']?>" class="btn btn-sm btn-secondary mt-1 p-1"><i class="fa fa-eye mx-2" data-toggle="tooltip" title="Request"></i> </a>
                       <button type="button" class="btn btn-danger mt-1 p-1 btn-sm deleteRequest" id="<?= $row['transactionCode'] ?>"><i class="fa fa-trash-o mx-2" aria-hidden="true"></i> </button>
                     </td>
                   </tr>

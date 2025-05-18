@@ -63,7 +63,7 @@ $con = connection();
                                 }elseif($row['statusTwo'] == 2){
                                     echo '<span class="badge bg-danger text-white p-2"><i class="fa fa-exclamation-triangle"></i> DECLINE </span>';
                                 } else {
-                                echo '<span class="badge bg-success p-2"><i class="fa fa-check-circle"></i> ORDERED </span>';
+                                echo '<span class="badge bg-success p-2 text-white"><i class="fa fa-check-circle"></i> ORDERED </span>';
                                 }
                             ?>
                         </td>

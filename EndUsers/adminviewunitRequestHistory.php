@@ -79,36 +79,6 @@ $con = connection();
             <div class="card-footer">
                 <p><?php echo $data['notes'] ?? '';?></p>
             </div>
-
-            <form action="action.php" method="post">
-                <input type="hidden" class="form-control" name="transcode" value="<?= $data['transactionCode'];?>">
-                <button type="submit" name="btnApprovedRequest" class="btn btn-primary" onclick="return confirm('Approved this Request?');"> APPROVED</button>
-                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#ttt">
-                    DECLINE
-                </button>
-            </form>
-            <!-- Modal -->
-            <div class="modal fade" id="ttt" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <form action="action.php" method="post">
-                            <input type="hidden" class="form-control" name="transcode" value="<?= $data['transactionCode'];?>">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Decline Request</h5>
-                            </div>
-                                <div class="modal-body">
-                                    <div class="form-group">
-                                        <textarea name="notes" id="" rows="5" class="form-control">We apologize, but we cannot approve your request now. If you wish to provide additional information or clarification, please request it again. Thank you.</textarea>
-                                    </div>
-                                </div>
-                            <div class="modal-footer">
-                                <button type="submit" name="btnDeclineRequest" class="btn btn-danger">Save changes</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
             <?php } ?>
             <hr>
       </div>

@@ -87,10 +87,7 @@ $con = connection();
                 <input type="hidden" class="form-control" name="Reason" value="<?= $data['Reason'];?>">
                 <input type="hidden" class="form-control" name="addSupply" value="<?= $data['addSupply'];?>">
                 <input type="hidden" class="form-control" name="quantity" value="<?= $data['quantity'];?>">
-                <input type="hidden" class="form-control" name="totalAmount" value="<?= number_format($total_cost, 2); ?>">
-
                 <input type="text" name="supplier" id="" class="form-control my-2" placeholder="Enter Supplier's Name" required>
-
                 <button type="submit" name="btnPostOrder" class="btn btn-primary" onclick="return confirm('Post this Order?');"> <i class="bi bi-check2-circle"></i> APPROVED</button>
                 <button type="submit" name="btnUnpostOrder" class="btn btn-danger" onclick="return confirm('Decline this Order?');"><i class="bi bi-x-circle"></i> DECLINE</button>
             </form>

@@ -11,6 +11,11 @@ $con = connection();
   <div class="col-lg-8 md-3">
     <div class="card">
       <div class="card-body">
+            <?php if ($notification): ?>
+                <div class="notification <?= $notificationType ?>">
+                    <?php echo htmlspecialchars($notification); ?>
+                </div>
+            <?php endif; ?>
             <center>
                 <img src="./images/bsu.jpg" alt="Profile" height="100px" width="100px" class="rounded-circle">
                 <h2>Purchased Order Arrival Form</h2>

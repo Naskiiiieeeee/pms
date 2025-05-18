@@ -237,7 +237,7 @@ class SystemOperators{
             $mail->setFrom('tamuni.vents@gmail.com', 'ProcurementMS');
             $mail->addAddress($empID);
             $mail->isHTML(true); // Enable HTML
-            $mail->Subject = '📦 Your Purchase Order Has Been Approved!';
+            $mail->Subject = 'Your Purchase Order Has Been Approved!';
 
             $mail->Body = '
             <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f9f9f9;">
@@ -302,7 +302,7 @@ class SystemOperators{
             $mail->setFrom('tamuni.vents@gmail.com', 'ProcurementMS');
             $mail->addAddress($empID);
             $mail->isHTML(true);
-            $mail->Subject = '❌ Purchase Request Declined';
+            $mail->Subject = 'Purchase Request Declined';
 
             $mail->Body = '
             <div style="font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px;">
@@ -357,40 +357,58 @@ class SystemOperators{
         }
     }
 
-    public function sendConfirmationOrder($empID, $orderID) {
+    public function sendConfirmationOrder($empEmail, $orderID) {
         $mail = new PHPMailer(true);
         try {
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
             $mail->Username = 'tamuni.vents@gmail.com';
-            $mail->Password = 'mhjvrevblevchuop';
+            $mail->Password = 'mhjvrevblevchuop'; 
             $mail->SMTPSecure = 'tls';
             $mail->Port = 587;
-      
+            
             $mail->setFrom('tamuni.vents@gmail.com', 'ProcurementMS');
-            $message_body = 'Good day, We would like to inform you that your purchase order has arrived at our office, Kindly pick up the package as soon as possible, "ORDER ID:' .$orderID. '"' ;
-            $mail->addAddress($empID);
-            $mail->Subject = 'Purchased Order Arrival';
-            $mail->Body = $message_body;
-      
+            $mail->addAddress($empEmail);
+            
+            $mail->Subject = 'Your Purchase Order Has Arrived (Order ID: ' . $orderID . ')';
+
+            $mail->isHTML(true);
+            
+            $htmlBody = '
+                <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
+                    <h2 style="color: #007BFF;">Your Order is Ready for Pickup!</h2>
+                    <p>Good day,</p>
+                    <p>We would like to inform you that your purchase order has <strong>arrived at our office</strong>.</p>
+                    <p><strong>Order ID:</strong> ' . htmlspecialchars($orderID) . '</p>
+                    <p>Please pick up your package as soon as possible.</p>
+                    <p style="margin-top: 30px;">Thank you,<br><strong>Procurement Management System</strong></p>
+                </div>
+            ';
+
+            $plainBody = "Your purchase order has arrived at our office.\n\nOrder ID: $orderID\n\nPlease pick up your package as soon as possible.\n\nThank you,\nProcurementMS";
+
+            $mail->Body = $htmlBody;
+            $mail->AltBody = $plainBody;
+
             if (!$mail->send()) {
-                echo '
-                <script>
-                  alert("Message could not be sent. Mailer Error: ' . $mail->ErrorInfo . '");
-                </script>
-                ';
+                return [
+                    'message' => "Message could not be sent. Mailer Error: " . $mail->ErrorInfo,
+                    'type' => 'error'
+                ];
             } else {
-                echo '
-                <script>
-                    alert("Purchase Order Package information has been sent in department head Portal!"); window.location="ordersHistory.php";
-                </script>
-                ';
+                return [
+                    'message' => "Purchase Order Package email sent successfully!",
+                    'type' => 'success'
+                ];
             }
         } catch (Exception $e) {
-            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            return [
+                'message' => "Mailer Exception: {$mail->ErrorInfo}",
+                'type' => 'error'
+            ];
         }
-      }
+    }
 
 }
 
