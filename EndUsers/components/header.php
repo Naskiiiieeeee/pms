@@ -55,6 +55,14 @@ $role = $_SESSION['role'];
         color: #721c24;
         border: 1px solid #f5c6cb;
     }
+        #report {
+        display: none;
+    }
+    @media print {
+        .noprint {
+            display: none !important;
+        }
+    }
     </style>
   </head>
     <body>

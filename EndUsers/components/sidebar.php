@@ -80,21 +80,21 @@
 
                             
               <li>
-                <a href="#reportSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-print"></i> System Reports</a>
-                <ul class="collapse list-unstyled" id="reportSubmenu">
-                    <li>
-                        <a href="#">PMS Request Reports</a>
+                <a href="#reportSubmenu" data-toggle="collapse" aria-expanded="<?= $isTemplateActive ? 'true' : 'false' ?>" class="dropdown-toggle <?= $isTemplateActive ? '' : '' ?>" class="dropdown-toggle"><i class="fas fa-print"></i> System Reports</a>
+                <ul class="collapse list-unstyled <?= $isTemplateActive ? 'show' : '' ?>" id="reportSubmenu">
+                    <li class="<?= $currentPage == 'adminPrintRequest' ? 'active' : '' ?>">
+                        <a href="adminPrintRequest">PMS Request Reports</a>
                     </li>
-                    <li>
-                        <a href="table.php">PMS Order Reports</a>
+                    <li class="<?= $currentPage == 'adminPrintOrders' ? 'active' : '' ?>">
+                        <a href="adminPrintOrders">PMS Order Reports</a>
                     </li>
                 </ul>
 	          </li>
               <li>
-                <a href="#profileSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-user"></i>  Profile</a>
-                <ul class="collapse list-unstyled" id="profileSubmenu">
-                    <li>
-                        <a href="#">User Account</a>
+                <a href="#profileSubmenu" data-toggle="collapse" aria-expanded="<?= $isTemplateActive ? 'true' : 'false' ?>" class="dropdown-toggle <?= $isTemplateActive ? '' : '' ?>" class="dropdown-toggle"><i class="fas fa-user"></i>  Profile</a>
+                <ul class="collapse list-unstyled <?= $isTemplateActive ? 'show' : '' ?>" id="profileSubmenu">
+                    <li class="<?= $currentPage == 'profile' ? 'active' : '' ?>">
+                        <a href="profile">User Account</a>
                     </li>
                     <li>
                         <a href="logout.php">Logout</a>
