@@ -328,3 +328,21 @@ if(isset($_POST['deleteUsers'])){
   $deleteUser->close();
   $con->close();
 }
+
+if(isset($_POST['btnUpdateUserPassword'])){
+  $pass = filter_input(INPUT_POST,'password', FILTER_SANITIZE_SPECIAL_CHARS);
+  $username = filter_input(INPUT_POST,'username', FILTER_SANITIZE_SPECIAL_CHARS);
+
+  $password = password_hash($pass, PASSWORD_BCRYPT);
+
+  $updateUserpassword = "UPDATE `users` SET `password` = ? WHERE `username` = ?";
+  $updateSTMT = $con->prepare($updateUserpassword);
+  $updateSTMT->bind_param("ss",$password,$username);
+  if($updateSTMT->execute()){
+      $_SESSION['notification'] = "User Password Updated Successfuly!";
+      $_SESSION['notification_type'] = "success";
+      echo "<script>window.location.href = 'profile';</script>";
+  }else{
+    echo "Error in Execution of data!".$updateSTMT->errno;
+  }
+}
