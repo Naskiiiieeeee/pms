@@ -90,7 +90,6 @@ $con = connection();
                         </td>
                         <td>
                             <a href="adminviewunitOrderHistory.php?ID=<?php echo $row['orderID']?>" class="btn btn-sm btn-secondary mt-1 p-1 "><div class="pb-1"><i class="fas fa-eye mx-2" data-toggle="tooltip" title="Request"></i></div> </a>
-                            <button type="button" class="btn btn-sm btn-danger mt-1 p-1 archieveOrders" id="<?= $row['orderID'] ?>" title="Archieve"><i class="fas fa-trash mx-2"></i> </button>
                         </td>
                   </tr>
                   <?php }?>

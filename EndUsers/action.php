@@ -41,10 +41,10 @@ if(isset($_POST['btnDeclineRequest'])){
   $transcode = filter_input(INPUT_POST, 'transcode', FILTER_SANITIZE_SPECIAL_CHARS);
   $notes = filter_input(INPUT_POST, 'notes', FILTER_SANITIZE_SPECIAL_CHARS);
   $statusOne = 2;
-  $declineRequest = "UPDATE `request` SET `statusOne` = ? , `notes` = ? WHERE `transactionCode` = ?";
+  $declineRequest = "UPDATE `request` SET `statusOne` = ? , `statusTwo` = ? , `notes` = ? WHERE `transactionCode` = ?";
   $declineRequestStmt = $con->prepare($declineRequest);
 
-  $declineRequestStmt->bind_param("iss",$statusOne,$notes,$transcode);
+  $declineRequestStmt->bind_param("iiss",$statusOne,$statusOne, $notes,$transcode);
   if($declineRequestStmt->execute()){
       $_SESSION['notification'] = "Request Has Been Declined";
       $_SESSION['notification_type'] = "error";

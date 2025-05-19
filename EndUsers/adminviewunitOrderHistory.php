@@ -24,6 +24,7 @@ $con = connection();
                 while($data = mysqli_fetch_assoc($result)){
                     $total_cost = 0;
                     $userID = $data['empID'];
+                    $status = $data['status'];   
             ?>
             <div class="receipt-info">
                 <p>Date Needed: <b><?= $data['dateNeeded'];?></b> </p>

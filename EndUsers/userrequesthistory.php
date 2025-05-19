@@ -7,7 +7,7 @@ $con = connection();
 
 ?>
 <!-- Page Content  -->
-<h2 class="mb-4">Approval Status</h2>
+<h2 class="mb-4">Request Approval Status</h2>
 
 <div class="row">
   
