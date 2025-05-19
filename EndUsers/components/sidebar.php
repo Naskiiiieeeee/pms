@@ -103,7 +103,7 @@
 	          </li>
 
 
-            <li>
+            <!-- <li>
                 <a href="#tempSubmenu" data-toggle="collapse" aria-expanded="<?= $isTemplateActive ? 'true' : 'false' ?>" class="dropdown-toggle <?= $isTemplateActive ? '' : '' ?>">
                     System Template
                 </a>
@@ -116,7 +116,7 @@
                         <a href="table">Table</a>
                     </li>
                 </ul>
-            </li>
+            </li> -->
 
 
 	        </ul>
