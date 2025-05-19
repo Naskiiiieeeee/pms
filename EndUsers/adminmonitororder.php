@@ -79,18 +79,17 @@ $con = connection();
                         <td>
                         <?php
                             if ($row['statusTwo'] == 0 ) {
-                            echo '<span class="badge bg-warning text-white p-2"><i class="fa fa-exclamation-triangle"></i> PENDING </span>';
+                            echo '<span class="badge bg-warning text-white mt-1 p-2"><i class="fa fa-exclamation-triangle"></i> PENDING </span>';
                             }elseif($row['statusTwo'] == 2){
-                            echo '<span class="badge bg-danger p-2"> <i class="bi bi-bag-x-fill"></i>DECLINE </span>';
+                            echo '<span class="badge bg-danger mt-1 p-2"> <i class="bi bi-bag-x-fill"></i>DECLINE </span>';
                             } 
                             else {
-                            echo '<span class="badge bg-success p-2"><i class="fa fa-check-circle"></i> GRANTED </span>';
+                            echo '<span class="badge bg-success mt-1 p-2"><i class="fa fa-check-circle"></i> GRANTED </span>';
                             }
                         ?>
                         </td>
                         <td>
                         <a href="adminviewunitOrders.php?ID=<?php echo $row['transactionCode']?>" class="btn btn-sm btn-secondary mt-1 p-1 "><div class="pb-1"><i class="fa fa-eye mx-2" data-toggle="tooltip" title="Request"></i></div> </a>
-                        <button type="button" class="btn btn-danger mt-1 p-1 btn-sm deleteResident" id="<?= $row['transactionCode'] ?>"><i class="fa fa-trash-o mx-2" aria-hidden="true"></i> </button>
                         </td>
                     </tr>
                   <?php }?>
@@ -119,8 +118,6 @@ $con = connection();
     </div>
   </div>
 </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
 <?php include_once("./components/footscript.php"); ?>

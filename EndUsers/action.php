@@ -71,15 +71,15 @@ if(isset($_POST['btnApprovedRequest'])){
   }
 }
 
-if(isset($_POST['deleteRequestA'])){
-  $id = filter_input(INPUT_POST, 'deleteRequestA', FILTER_SANITIZE_SPECIAL_CHARS);
+if(isset($_POST['transactionCode'])){
+  $id = filter_input(INPUT_POST, 'transactionCode', FILTER_SANITIZE_SPECIAL_CHARS);
   $sql = "DELETE FROM `request` WHERE `transactionCode` = '$id'";
   $query = $con->query($sql) or die ($con->error);
 
   if($query){
-      '<script>
-          window.location = "monitorRequest.php"; 
-       </script>';
+      $_SESSION['notification'] = "Request Deleted Successfully!";
+      $_SESSION['notification_type'] = "success";
+      echo "<script>window.location.href = 'adminmonitorrequest';</script>";
   }
 }
 
@@ -162,7 +162,6 @@ if(isset($_POST['btnUnpostOrder'])){
   $Reason = filter_input(INPUT_POST, 'Reason', FILTER_SANITIZE_SPECIAL_CHARS);
   $addSupply = filter_input(INPUT_POST, 'addSupply', FILTER_SANITIZE_SPECIAL_CHARS);
   $quantity = filter_input(INPUT_POST, 'quantity', FILTER_SANITIZE_SPECIAL_CHARS);
-  $price = filter_input(INPUT_POST, 'price', FILTER_SANITIZE_SPECIAL_CHARS);
   $totalAmount = filter_input(INPUT_POST, 'totalAmount', FILTER_SANITIZE_SPECIAL_CHARS);
   $dateNeeded = filter_input(INPUT_POST, 'dateNeeded', FILTER_SANITIZE_SPECIAL_CHARS);
   $supplier = filter_input(INPUT_POST, 'supplier', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -176,11 +175,11 @@ if(isset($_POST['btnUnpostOrder'])){
         if($results->num_rows > 0){
           echo '<script> alert("Duplicate Purchased Order!"); window.location = "monitorOrders.php"; </>';
         }else{
-            $insertOrder = "INSERT INTO `orders`(`orderID`, `requestID`, `empID`, `Reason`, `addSupply`, `quantity`, `price`, `totalAmount`, `dateNeeded`, `supplierID`,`status`,`datePosted`) VALUES
-            (?,?,?,?,?,?,?,?,?,?,?,?)
+            $insertOrder = "INSERT INTO `orders`(`orderID`, `requestID`, `empID`, `Reason`, `addSupply`, `quantity`, `dateNeeded`, `supplierID`,`status`,`datePosted`) VALUES
+            (?,?,?,?,?,?,?,?,?,?)
             ";
             $inserOrderStmt = $con->prepare($insertOrder);
-            $inserOrderStmt->bind_param("ssssssssssss",$orderID,$transcode,$empID,$Reason,$addSupply,$quantity,$price,$totalAmount,$dateNeeded,$supplier,$status,$datePosted );
+            $inserOrderStmt->bind_param("ssssssssss",$orderID,$transcode,$empID,$Reason,$addSupply,$quantity,$dateNeeded,$supplier,$status,$datePosted );
   
             if($inserOrderStmt->execute()){
               $updateRequestStatusTwo = mysqli_query($con,"UPDATE `request` SET `statusTwo` = '$statusTwo' WHERE `transactionCode` = '$transcode' ");

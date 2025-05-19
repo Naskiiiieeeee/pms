@@ -117,8 +117,6 @@
                     </li>
                 </ul>
             </li> -->
-
-
 	        </ul>
 	        <div class="footer">
 	        	<p>Copyright &copy; PMS-Developers <script>document.write(new Date().getFullYear());</script></p>
@@ -162,21 +160,14 @@
                     </li>
                 </ul>
               </li>
-                            
-              <!-- <li>
-                <a href="#reportSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-print"></i> System Reports</a>
-                <ul class="collapse list-unstyled" id="reportSubmenu">
-                    <li>
-                        <a href="#">PMS Request Reports</a>
-                    </li>
-                </ul>
-	          </li> -->
 
               <li>
-                <a href="#profileSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-user"></i>  Profile</a>
-                <ul class="collapse list-unstyled" id="profileSubmenu">
-                    <li>
-                        <a href="#">User Account</a>
+                <a href="#profileSubmenu" data-toggle="collapse" aria-expanded="<?= $isTemplateActive ? 'true' : 'false' ?>" class="dropdown-toggle <?= $isTemplateActive ? '' : '' ?>">
+                    <i class="fas fa-user"></i>  Profile
+                </a>
+                <ul class="collapse list-unstyled <?= $isTemplateActive ? 'show' : '' ?>" id="profileSubmenu">
+                    <li class="<?= $currentPage == 'profile' ? 'active' : '' ?>">
+                        <a href="profile">User Account</a>
                     </li>
                     <li>
                         <a href="logout.php">Logout</a>

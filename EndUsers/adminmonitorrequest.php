@@ -115,43 +115,35 @@ $con = connection();
   </div>
 </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        $(document).ready(function(){
-        $(document).on('click','.deleteRequest',function(){
-            var id = $(this).attr('id');
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll(".deleteRequest").forEach(button => {
+    button.addEventListener("click", function () {
+      const transactionCode = this.id;
 
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                $.ajax({
-                    url: 'action.php',
-                    type: 'POST',
-                    data: {deleteRequestA:id},
-                    success: function(data){
-                    Swal.fire({
-                        title: 'Success',
-                        icon: 'success',
-                        text: ' Request Information Deleted Succesfully',
-                        showConfirmButton: false,
-                        timer: 2000,
-                    }).then(()=>{
-                        window.location.reload();
-                    })
-                    }
-                })
-                }
-            })
+      if (confirm("Are you sure you want to delete this request?")) {
+        fetch("action.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: "transactionCode=" + encodeURIComponent(transactionCode),
         })
+        .then(response => response.text())
+        .then(result => {
+          alert(result);
+          location.reload(); 
         })
-    </script>
+        .catch(error => {
+          console.error("Error:", error);
+          alert("Something went wrong.");
+        });
+      }
+    });
+  });
+});
+</script>
+
 
 
 <?php include_once("./components/footscript.php"); ?>
