@@ -102,6 +102,9 @@ unset($_SESSION['notification'], $_SESSION['notification_type']);
             <label class="form-check-label" for="showLoginPassword">Show Password</label>
             </div>
         </div>
+        <div class="mb-2">
+          <a href="forgetpassword.php" class=" text-dark ">Forget Password?</a>
+        </div>
         <button type="submit" name="btnLogin" class="btn btn-primary w-100"> <i class="fas fa-arrow-right"></i> Login</button>
     </form>
       <p class="mt-3 text-center">

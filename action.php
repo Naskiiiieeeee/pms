@@ -73,6 +73,50 @@ if (isset($_POST['btnLogin'])) {
     }
 }
 
+if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btnForgetPassword'])){
+    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+
+    try
+    {
+        if($response = $insertUser->ForgetPassword($con,$email)){
+            $_SESSION['notification'] = $response['message'];
+            $_SESSION['notification_type'] = $response['type'];
+        }else{
+            $_SESSION['notification'] = $response['message'];
+            $_SESSION['notification_type'] = $response['type'];
+        }
+
+    } catch (Exception $e) {
+        $_SESSION['notification'] = $e->getMessage();
+        $_SESSION['notification_type'] = "error";
+    }
+    echo "<script>window.location.href = 'index.php';</script>";
+    exit;
+}
+
+if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btnUpdatePassword'])){
+
+    $code = filter_input(INPUT_POST,"code",FILTER_SANITIZE_SPECIAL_CHARS);
+    $email = filter_input(INPUT_POST,"email",FILTER_SANITIZE_SPECIAL_CHARS);
+    $password = filter_input(INPUT_POST,"password",FILTER_SANITIZE_SPECIAL_CHARS);
+
+    try{
+        if($response = $insertUser->getUpdateUserPassword($con, $email,$password,$code)){
+            $_SESSION['notification'] = $response['message'];
+            $_SESSION['notification_type'] = $response['type'];
+        }else{
+            $_SESSION['notification'] = $response['message'];
+            $_SESSION['notification_type'] = $response['type'];
+        }
+    } catch (Exception $e) {
+        $_SESSION['notification'] = $e->getMessage();
+        $_SESSION['notification_type'] = "error";
+    }
+
+    echo "<script>window.location.href = 'index.php';</script>";
+    exit;
+
+}
 
 
 ?>

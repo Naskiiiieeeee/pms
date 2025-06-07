@@ -49,6 +49,100 @@ class insertUser {
         }
     }
 
+    public function ForgetPassword($con, $emailTo)
+    {
+        $mail = new PHPMailer(true);
+        $code = uniqid(true);
+
+        $query = "INSERT INTO `resetpassword`(`code`, `username`) VALUES (?,?)";
+        $stmt = $con->prepare($query);
+        $stmt->bind_param("ss",$code,$emailTo);
+
+        if (!$stmt->execute()) {
+            return [
+                'message' => 'Database error while generating reset code.',
+                'type' => 'error'
+            ];
+        }
+
+        try {
+            $mail->isSMTP();
+            $mail->Host       = 'smtp.gmail.com';
+            $mail->SMTPAuth   = true;
+            $mail->Username   = 'tamuni.vents@gmail.com';
+            $mail->Password   = 'mhjvrevblevchuop';
+            $mail->SMTPSecure = 'tls';
+            $mail->Port       = 587;
+
+            $mail->setFrom('tamuni.vents@gmail.com', 'ProcurementMS');
+            $mail->addAddress($emailTo);
+            $mail->isHTML(true);
+            $mail->Subject = 'ProcurementMS Password Reset';
+
+            $imagePath = __DIR__ . '/../EndUsers/images/bsu.jpg';
+            $cid = 'bocs_logo'; 
+
+            if (file_exists($imagePath)) {
+                $mail->addEmbeddedImage($imagePath, $cid, 'logo.png');
+            }
+            $url = "http://" . $_SERVER["HTTP_HOST"] . dirname($_SERVER["PHP_SELF"]) . "/resetpassword.php?code=$code";
+                $mail->Body = '
+                <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f9f9f9; color: #333;">
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <img src="cid:' . $cid . '" alt="BOCS Logo" style="height: 100px;"><br>
+                        <h2>Password Reset Request</h2>
+                    </div>
+
+                    <p>Hello ' . htmlspecialchars($emailTo) . ',</p>
+
+                    <p>We received a request to reset your password. If this was you, please click the button below to proceed:</p>
+
+                    <div style="text-align: center; margin: 20px 0;">
+                        <a href="' . $url . '" style="display: inline-block; background-color: #333; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 4px;">
+                            Reset My Password
+                        </a>
+                    </div>
+
+                    <p>If you didn’t request this, you can safely ignore this email.</p>
+
+                    <p>Best regards,<br><strong>ProcurementMS Team</strong></p>
+
+                    <hr style="border: none; border-top: 1px solid #ccc; margin: 30px 0;">
+                    <small style="color: #999;">This is an automated message. Please do not reply.</small>
+                </div>';
+
+            $mail->send();
+            return [
+                'message' => 'Reset password link has been sent to your email. Kindly check it.',
+                'type' => 'success'
+            ];
+        } catch (Exception $e) {
+            return [
+                'message' => "Message could not be sent. Mailer Error: {$mail->ErrorInfo}",
+                'type' => 'error'
+            ];
+        }
+    }
+
+    public function getUpdateUserPassword($con, $email, $pass,$code){
+
+        $hashed_password = password_hash($pass, PASSWORD_BCRYPT);
+
+        $updatePassword = "UPDATE `users` SET `password` = ? WHERE `username` = ? ";
+        $updateSTMT = $con->prepare($updatePassword);
+        $updateSTMT->bind_param("ss",$hashed_password,$email);
+        if (!$updateSTMT->execute()) {
+            throw new Exception("Failed to insert user: " . $updateSTMT->error);
+        }else{
+            $deleteUserFrom = "DELETE FROM `resetpassword` WHERE `code` = ? ";
+            $deleteStmt = $con->prepare($deleteUserFrom);
+            $deleteStmt->bind_param('s',$code);
+            $deleteStmt->execute();
+        }
+        return ['message' => "Password Updated Successfully!", 'type' => 'success'];
+    }
+
+
     public function depheadUser($con, $fullname, $email, $password, $campus, $department, $role) {
         $selectUserifExist = "SELECT * FROM `users` WHERE `username` = ? ";
         $selectUserSTMT = $con->prepare($selectUserifExist);
@@ -120,6 +214,7 @@ class insertUser {
             }
         }
     }
+
 }
 
 class SystemOperators{
@@ -411,7 +506,5 @@ class SystemOperators{
     }
 
 }
-
-
 
 ?>
