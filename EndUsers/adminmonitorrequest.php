@@ -6,7 +6,6 @@ include_once(__DIR__ . "/../connection/config.php");
 $con = connection();
 
 ?>
-<!-- Page Content  -->
 <h2 class="mb-4">Manage Request</h2>
 
 <div class="row">
@@ -41,7 +40,7 @@ $con = connection();
                       }else{
                           $page_no = 1; 
                       }
-                      $total_records_per_page = 5; // Change this to the number of records per page you want
+                      $total_records_per_page = 5; 
                       $offset = ($page_no - 1) * $total_records_per_page;
                       $count = $offset + 1;
                       $previous_page = $page_no - 1;

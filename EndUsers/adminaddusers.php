@@ -5,7 +5,6 @@ include_once("./components/innernavbar.php");
 include_once(__DIR__ . "/../connection/config.php");
 $con = connection();
 ?>
-<!-- Page Content  -->
 <h2 class="mb-4">Add New Users</h2>
 
 <div class="row">
@@ -77,7 +76,7 @@ $con = connection();
                 <div class="text-center">
                     <button type="submit" class="btn btn-primary" name="btnSaveUser"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save User Information</button>
                 </div>
-            </form><!-- End Profile Edit Form -->
+            </form>
       </div>
     </div>
   </div>
