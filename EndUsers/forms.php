@@ -6,7 +6,6 @@ include_once(__DIR__ . "/../connection/config.php");
 $con = connection();
 
 ?>
-<!-- Page Content  -->
 <h2 class="mb-4">Forms</h2>
 
 <div class="row">
@@ -51,9 +50,5 @@ $con = connection();
       </div>
     </div>
   </div>
-
 </div>
-
-
-
 <?php include_once("./components/footscript.php"); ?>
