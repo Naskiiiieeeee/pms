@@ -217,7 +217,7 @@ unset($_SESSION['notification'], $_SESSION['notification_type']);
       feedback.style.display = "block";
       registerBtn.disabled = true;
     }
-  }
+  }  
 
   password.addEventListener("input", checkPasswordMatch);
   confirmPassword.addEventListener("input", checkPasswordMatch);

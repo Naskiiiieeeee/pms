@@ -6,7 +6,7 @@ include_once(__DIR__ . "/../Methods/classes.php");
 $insertUser = new insertUser();
 $SystemOperators = new SystemOperators();
 
-if (isset($_POST['btnSaveRequest'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btnSaveRequest'])) {
   $transactionCode = $SystemOperators->generateNextTransactionCode($con); 
   $Reason = filter_input(INPUT_POST, 'Reason', FILTER_SANITIZE_SPECIAL_CHARS);
   $Description = filter_input(INPUT_POST, 'Description', FILTER_SANITIZE_SPECIAL_CHARS);
