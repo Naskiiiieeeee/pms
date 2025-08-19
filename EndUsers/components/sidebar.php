@@ -80,7 +80,7 @@
 
                             
               <li>
-                <a href="#reportSubmenu" data-toggle="collapse" aria-expanded="<?= $isTemplateActive ? 'true' : 'false' ?>" class="dropdown-toggle <?= $isTemplateActive ? '' : '' ?>" class="dropdown-toggle"><i class="fas fa-print"></i> System Reports</a>
+                <a href="#reportSubmenu" data-toggle="collapse" aria-expanded="<?= $isTemplateActive ? 'true' : 'false' ?>" class="dropdown-toggle <?= $isTemplateActive ? '' : '' ?>" class="dropdown-toggle"><i class="fas fa-print"></i> Reports</a>
                 <ul class="collapse list-unstyled <?= $isTemplateActive ? 'show' : '' ?>" id="reportSubmenu">
                     <li class="<?= $currentPage == 'adminPrintRequest' ? 'active' : '' ?>">
                         <a href="adminPrintRequest">PMS Request Reports</a>
