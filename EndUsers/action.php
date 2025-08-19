@@ -85,8 +85,7 @@ if(isset($_POST['transactionCode'])){
 
 if(isset($_POST['btnPostOrder'])){
 
-
-  $orderID = $SystemOperators->generateNextTransactionCode($con); 
+  $orderID = $SystemOperators->generateTransactionCodeForOrder($con); 
   $status = 1;
   $statusOne = 0;
   $transcode = filter_input(INPUT_POST, 'transcode', FILTER_SANITIZE_SPECIAL_CHARS);
