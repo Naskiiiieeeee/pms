@@ -48,7 +48,7 @@ $con = connection();
                       $previous_page = $page_no - 1;
                       $next_page = $page_no + 1;
     
-                      $search = mysqli_query($con, "SELECT COUNT(*) as total_records FROM `request` WHERE  `statusTwo` = 0 ORDER BY `r_id` DESC")
+                      $search = mysqli_query($con, "SELECT COUNT(*) as total_records FROM `request` WHERE  `statusTwo` = 0 AND `statusOne` != 0 ORDER BY `r_id` DESC")
                       or die(mysqli_errno($con));
     
                       $records = mysqli_fetch_array($search);
@@ -57,7 +57,7 @@ $con = connection();
     
                       $total_no_of_pages = ceil($total_records / $total_records_per_page);
 
-                    $getUsersInfo = mysqli_query($con,"SELECT * FROM `request` WHERE  `statusTwo` = 0 ORDER BY `r_id` DESC LIMIT $offset , $total_records_per_page");
+                    $getUsersInfo = mysqli_query($con,"SELECT * FROM `request` WHERE  `statusTwo` = 0  AND `statusOne` != 0  ORDER BY `r_id` DESC LIMIT $offset , $total_records_per_page");
                     while($row = mysqli_fetch_assoc($getUsersInfo)){
                       $userID = $row['empID'];
                     ?>
