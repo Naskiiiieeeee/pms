@@ -296,18 +296,22 @@ class SystemOperators{
     }
 
     public function generateTransactionCodeForOrder($con){
-        $query = " SELECT `orderID` FROM `orders` ORDER BY `o_id` DESC LIMIT 1";
+        $query = "SELECT `orderID` FROM `orders` ORDER BY `o_id` DESC LIMIT 1";
         $result = $con->query($query);
         
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
             $lastCode = $row['orderID'];
         } else {
-            $lastCode = "000"; // starting point
+            $lastCode = "00"; // starting point
         }
+
         $lastNumber = intval($lastCode);
         $nextNumber = $lastNumber + 1;
-        $nextCode = str_pad($nextNumber, 3, "0", STR_PAD_LEFT);
+
+        // 2 digits lang, leading zero kung below 10
+        $nextCode = str_pad($nextNumber, 2, "0", STR_PAD_LEFT);
+
         return $nextCode;
     }
 
