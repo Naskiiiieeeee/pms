@@ -109,43 +109,53 @@ $con = connection();
 
     <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
+<script>
+$(document).ready(function(){
+    $(document).on('click','.deleteUsers',function(){
+        var id = $(this).attr('id');
 
-    <script>
-        $(document).ready(function(){
-        $(document).on('click','.deleteUsers',function(){
-            var id = $(this).attr('id');
-
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
                 $.ajax({
                     url: 'action.php',
                     type: 'POST',
                     data: {deleteUsers:id},
-                    success: function(data){
-                    Swal.fire({
-                        title: 'Success',
-                        icon: 'success',
-                        text: ' Users Information Deleted Succesfully',
-                        showConfirmButton: false,
-                        timer: 2000,
-                    }).then(()=>{
-                        window.location.reload();
-                    })
+                    success: function(response){
+                        if(response === "protected"){
+                            Swal.fire({
+                                title: 'Blocked',
+                                icon: 'info',
+                                text: 'This account is protected and cannot be deleted.',
+                                timer: 2500
+                            });
+                        } else if(response === "deleted"){
+                            Swal.fire({
+                                title: 'Deleted!',
+                                icon: 'success',
+                                text: 'User deleted successfully',
+                                timer: 2000
+                            }).then(()=>{ window.location.reload(); });
+                        } else if(response === "nouser"){
+                            Swal.fire("Not Found","No user found!","error");
+                        } else {
+                            Swal.fire("Error","Something went wrong.","error");
+                        }
                     }
-                })
-                }
-            })
+                });
+            }
         })
-        })
-    </script>
+    })
+})
+</script>
+
 
     <script type="text/javascript">
         $(document).ready(function() {

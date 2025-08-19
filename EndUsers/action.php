@@ -309,22 +309,40 @@ if(isset($_POST['btnUpdateUsersAccess'])){
 }
 
 
+if (isset($_POST['deleteUsers'])) {
+      $id = filter_input(INPUT_POST, 'deleteUsers', FILTER_SANITIZE_NUMBER_INT);
 
-if(isset($_POST['deleteUsers'])){
-  $id = filter_input(INPUT_POST, 'deleteUsers', FILTER_SANITIZE_SPECIAL_CHARS);
-  $sql = "DELETE FROM `users` WHERE `user_id` = ?";
-  $deleteUser = $con->prepare($sql);
-  $deleteUser->bind_param("s", $id );
-  if($deleteUser->execute()){
-      '<script>
-          window.location = "adminverifieduser"; 
-       </script>';
-  }else{
-    echo "Error in executing Data".$deleteUser->errno;
+      // Check user
+      $selectUser = "SELECT * FROM `users` WHERE `user_id` = ?";
+      $stmt = $con->prepare($selectUser);
+      $stmt->bind_param("i", $id); // bind ID
+      $stmt->execute();
+      $result = $stmt->get_result();
+
+      if ($result->num_rows > 0) {
+          $row = $result->fetch_assoc(); // fetch_assoc instead of fetch
+          $isprotected = $row['isprotected'];
+
+          if ($isprotected == 1) {
+              echo "protected"; // send this back to AJAX
+          } else {
+              $sql = "DELETE FROM `users` WHERE `user_id` = ?";
+              $deleteUser = $con->prepare($sql);
+              $deleteUser->bind_param("i", $id);
+
+              if ($deleteUser->execute()) {
+                  echo "deleted"; // return status
+              } else {
+                  echo "error";
+              }
+              $deleteUser->close();
+          }
+      } else {
+          echo "nouser";
+      }
+      $stmt->close();
+      $con->close();
   }
-  $deleteUser->close();
-  $con->close();
-}
 
 if(isset($_POST['btnUpdateUserPassword'])){
   $pass = filter_input(INPUT_POST,'password', FILTER_SANITIZE_SPECIAL_CHARS);
