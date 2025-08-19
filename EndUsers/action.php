@@ -29,7 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btnSaveRequest'])) {
         $_SESSION['notification'] = $response['message'];
         $_SESSION['notification_type'] = $response['type'];
         echo "<script>window.location.href = 'requestnow';</script>";
-
   } else {
         $_SESSION['notification'] = "Error in executing data!";
         $_SESSION['notification_type'] = "error";

@@ -280,27 +280,20 @@ class SystemOperators{
         }
     }
     public function generateNextTransactionCode($con) {
-            $query = "SELECT transactionCode FROM `request` ORDER BY r_id DESC LIMIT 1";
-            $result = $con->query($query);
+        $query = "SELECT transactionCode FROM `request` ORDER BY r_id DESC LIMIT 1";
+        $result = $con->query($query);
 
-            if ($result->num_rows > 0) {
-                $row = $result->fetch_assoc();
-                $lastCode = $row['transactionCode'];
-            } else {
-                $lastCode = "A0";
-            }
-            preg_match('/([A-Z])([0-9]+)/', $lastCode, $matches);
-            $lastLetter = $matches[1];
-            $lastNumber = intval($matches[2]);
-            if ($lastNumber < 9) {
-                $nextNumber = $lastNumber + 1;
-                $nextLetter = $lastLetter;
-            } else {
-                $nextNumber = 1;
-                $nextLetter = chr(ord($lastLetter) + 1);
-            }
-        return $nextLetter . $nextNumber;
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $lastCode = $row['transactionCode'];
+        } else {
+            $lastCode = "000"; // starting point
         }
+        $lastNumber = intval($lastCode);
+        $nextNumber = $lastNumber + 1;
+        $nextCode = str_pad($nextNumber, 3, "0", STR_PAD_LEFT);
+        return $nextCode;
+    }
 
     public function randomStringGenerator($length, $characters){
         $randomString = '';
